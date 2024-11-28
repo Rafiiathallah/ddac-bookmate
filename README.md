@@ -31,12 +31,7 @@ Bookmate is your personal digital library companion. Whether you're a night owl 
 
 ### Installation & Setup
 
-1. Clone the repository and navigate to project:
-   git clone https://github.com/Rafiiathallah/ddac-bookmate.git
-   cd ddac-bookmate
-
-2. Frontend Setup:
-   cd frontend
+1. Frontend Setup:
    pnpm install # or npm install
    pnpm dev # or npm run dev
 
