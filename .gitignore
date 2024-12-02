@@ -3,6 +3,11 @@
 /node_modules
 /.pnp
 .pnp.js
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # testing
 /coverage
@@ -17,6 +22,7 @@
 # misc
 .DS_Store
 *.pem
+Thumbs.db
 
 # debug
 npm-debug.log*
@@ -92,17 +98,15 @@ artifacts/
 **/[Pp]ackages/*
 !**/[Pp]ackages/build/
 
-# Azure deployment settings
+# AWS Specific
 *.pubxml
 *.publishproj
 PublishProfiles/
 *.azurePubxml
+aws-lambda-tools-defaults.json
+aws-beanstalk-tools-defaults.json
 
 # Test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 TestResults/
-
-# System Files
-.DS_Store
-Thumbs.db
