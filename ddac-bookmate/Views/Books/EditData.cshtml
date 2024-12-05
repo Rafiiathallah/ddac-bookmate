@@ -1,0 +1,39 @@
+﻿@model ddac_bookmate.Models.Book
+<center>
+	<h1>Edit Book Information:</h1>
+	<hr />
+	<form asp-action="UpdateData" asp-controller="Books" method="post">
+		<table>
+			<tr>
+				<th><label asp-for="BookID"></label></th>
+				<td><input asp-for="BookID" readonly /></td>
+				<td><span asp-validation-for="BookID"></span></td>
+			</tr>
+			<tr>
+				<th><label asp-for="BookName"></label></th>
+				<td><input asp-for="BookName" required /></td>
+				<td><span asp-validation-for="BookName"></span></td>
+			</tr>
+			<tr>
+				<th><label asp-for="BookAuthor"></label></th>
+				<td><input asp-for="BookAuthor" required /></td>
+				<td><span asp-validation-for="BookAuthor"></span></td>
+			</tr>
+			<tr>
+				<th><label asp-for="BookPublishedDate"></label></th>
+				<td><input asp-for="BookPublishedDate" type="date" required /></td>
+				<td><span asp-validation-for="BookPublishedDate"></span></td>
+			</tr>
+			<tr>
+				<th><label asp-for="BookPrice"></label></th>
+				<td><input asp-for="BookPrice" type="number" step="0.01" required /></td>
+				<td><span asp-validation-for="BookPrice"></span></td>
+			</tr>
+			<tr>
+				<td colspan="3" style="text-align:center">
+					<input type="submit" value="Update Book" class="btn-info" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</center>

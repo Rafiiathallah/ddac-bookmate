@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ddac-bookmate", "ddac-bookmate\ddac-bookmate.csproj", "{19843E21-E626-44CB-996B-C1922F24B917}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{19843E21-E626-44CB-996B-C1922F24B917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19843E21-E626-44CB-996B-C1922F24B917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19843E21-E626-44CB-996B-C1922F24B917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19843E21-E626-44CB-996B-C1922F24B917}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2F21D377-7487-416F-80C4-F6A1FB5407DD}
+	EndGlobalSection
+EndGlobal
