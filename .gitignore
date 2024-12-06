@@ -47,9 +47,9 @@ nupkg/
 *.nuget.props
 *.nuget.targets
 
-# Local development settings
-appsettings.Development.json
-*.Development.json
+# # Local development settings
+# appsettings.Development.json
+# *.Development.json
 
 # Build results
 [Dd]ebug/
