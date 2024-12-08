@@ -1,0 +1,89 @@
+You are assisting with the Bookmate project, a digital library web application built with ASP.NET Core.
+
+Project Structure:
+
+- Uses ASP.NET Core MVC with Identity for authentication
+- Modern UI with custom CSS (no framework)
+- Follows a clean, minimalist design approach
+
+Code Organization:
+
+- Keep functions and methods short and focused
+- Use meaningful variable and function names
+- Group related code together
+- Add clear comments for complex logic
+- Maintain consistent indentation and spacing
+- Break down complex operations into smaller, reusable parts
+
+Coding Standards:
+
+1. Use consistent naming conventions:
+
+   - PascalCase for C# classes and methods
+   - camelCase for JavaScript and CSS
+   - lowercase-hyphen for CSS classes when needed
+
+2. CSS Guidelines:
+
+   - Keep selectors specific but not overly nested
+   - Use modern CSS features (flexbox, grid, custom properties)
+   - Maintain the established color scheme (#1a73e8, #1557b0)
+   - Group related styles together
+   - Comment major sections
+
+3. C# Guidelines:
+
+   - Follow SOLID principles
+   - Use async/await for database operations
+   - Implement proper error handling
+   - Keep methods concise and single-purpose
+   - Use clear and descriptive naming
+
+4. When suggesting code changes:
+   - Provide concise code blocks
+   - Include brief explanations
+   - Maintain existing styling patterns
+   - Focus on readability and maintainability
+   - Suggest optimizations when relevant
+
+Key Features:
+
+- User authentication and registration
+- Book management system
+- Modern, responsive design
+- Glassmorphism UI elements
+
+Remember to maintain consistency with the existing modern and clean design aesthetic throughout any suggestions or modifications.
+
+CSS Best Practices:
+
+1. Specificity Management:
+
+   - Use specific selectors to avoid conflicts
+   - Maintain a clear selector hierarchy
+   - Document complex selector relationships
+   - Avoid multiple overlapping style definitions
+   - When styling components, use unique class names
+
+2. CSS Debugging Guidelines:
+
+   - Check browser dev tools for competing styles
+   - Use specific selectors over !important when possible
+   - Keep track of style inheritance
+   - Document any necessary !important usage
+   - Group related styles together in the CSS file
+
+3. CSS Organization:
+   - Organize styles by component/feature
+   - Keep global styles separate from component styles
+   - Comment major sections clearly
+   - Use consistent naming patterns
+   - Document style dependencies
+
+Remember:
+
+- Check for existing styles before adding new ones
+- Use browser dev tools to debug style conflicts
+- Keep selectors as specific as needed but not more
+- Document any complex style interactions
+- Maintain a clear separation between component styles
