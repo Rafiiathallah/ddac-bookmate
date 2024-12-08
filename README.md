@@ -12,11 +12,12 @@ Bookmate is your personal digital library companion. Whether you're a night owl 
 
 ### Key Features
 
-- Register and login 
+- Register and login
 - View books (searched by search bar or by genre)
 - View authors and publishers and their related books
 - Manage user account
 - Manage library containing bought and borrowed books
+- Modern UI/UX Experience
 
 ## Tech Stack
 
