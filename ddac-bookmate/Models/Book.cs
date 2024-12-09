@@ -16,6 +16,6 @@ namespace ddac_bookmate.Models
         public ICollection<BookAuthor> BookAuthors { get; set; }
         public ICollection<BookPublisher> BookPublishers { get; set; }
         public ICollection<BookGenre> BookGenres { get; set; }
-        public ICollection<Library> Libraries { get; set; }
+        public ICollection<BookLibrary> BookLibraries { get; set; }
     }
 }

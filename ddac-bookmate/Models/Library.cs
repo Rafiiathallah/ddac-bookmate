@@ -9,15 +9,14 @@ namespace ddac_bookmate.Models
         [Key]
         public int LibraryId { get; set; }
         public string UserId { get; set; }
-        public int BookId { get; set; }
         [Required]
         public int BookCount { get; set; }
         public DateTime AddedDate { get; set; } = DateTime.Now;
 
         // Navigation properties
-        [ForeignKey("UserId")]
+        public ICollection<BookLibrary> BookAuthors { get; set; }
+
         public ddac_bookmateUser User { get; set; }
-        [ForeignKey("BookId")]
-        public Book Book { get; set; }
+
     }
 }

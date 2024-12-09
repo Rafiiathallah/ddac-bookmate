@@ -16,7 +16,7 @@ namespace ddac_bookmate.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Book> books = await _context.BookTable.ToListAsync();
+            List<Book> books = await _context.Books.ToListAsync();
             return View(books);
         }
 
@@ -53,7 +53,7 @@ namespace ddac_bookmate.Controllers
             {
                 return NotFound();
             }
-            var book = await _context.BookTable.FindAsync(BookID);
+            var book = await _context.Books.FindAsync(BookID);
             if (book == null)
             {
                 return BadRequest(BookID + " is not found in the table!");
@@ -72,7 +72,7 @@ namespace ddac_bookmate.Controllers
                     // Convert to UTC before saving
                     book.BookPublishedDate = DateTime.SpecifyKind(book.BookPublishedDate, DateTimeKind.Utc);
                     
-                    _context.BookTable.Update(book);
+                    _context.Books.Update(book);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "Books");
                 }
@@ -90,12 +90,12 @@ namespace ddac_bookmate.Controllers
             {
                 return NotFound();
             }
-            var book = await _context.BookTable.FindAsync(BookID);
+            var book = await _context.Books.FindAsync(BookID);
             if (book == null)
             {
                 return BadRequest(BookID + " is not found in the list!");
             }
-            _context.BookTable.Remove(book);
+            _context.Books.Remove(book);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Books");
         }

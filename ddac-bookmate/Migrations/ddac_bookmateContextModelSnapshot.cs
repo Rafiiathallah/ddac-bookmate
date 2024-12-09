@@ -234,6 +234,32 @@ namespace ddac_bookmate.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ddac_bookmate.Models.Author", b =>
+                {
+                    b.Property<int>("AuthorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AuthorId"));
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("AuthorId");
+
+                    b.ToTable("Authors");
+                });
+
             modelBuilder.Entity("ddac_bookmate.Models.Book", b =>
                 {
                     b.Property<int>("BookID")
@@ -254,9 +280,177 @@ namespace ddac_bookmate.Migrations
                     b.Property<DateTime>("BookPublishedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("LanguageId")
+                        .HasColumnType("integer");
+
                     b.HasKey("BookID");
 
-                    b.ToTable("BookTable");
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.BookAuthor", b =>
+                {
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("BookAuthorId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BookId", "AuthorId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("BookAuthors");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.BookGenre", b =>
+                {
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("BookGenreId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BookId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("BookGenres");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.BookLibrary", b =>
+                {
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LibraryId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("BookLibraryId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BookId", "LibraryId");
+
+                    b.HasIndex("LibraryId");
+
+                    b.ToTable("BookLibraries");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.BookPublisher", b =>
+                {
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PublisherId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("BookPublisherId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BookId", "PublisherId");
+
+                    b.HasIndex("PublisherId");
+
+                    b.ToTable("BookPublishers");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Genre", b =>
+                {
+                    b.Property<int>("GenreId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("GenreId"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("GenreId");
+
+                    b.ToTable("Genres");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Language", b =>
+                {
+                    b.Property<int>("LanguageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LanguageId"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("LanguageId");
+
+                    b.ToTable("Languages");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Library", b =>
+                {
+                    b.Property<int>("LibraryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LibraryId"));
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("BookCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ddac_bookmateUserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("LibraryId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("ddac_bookmateUserId");
+
+                    b.ToTable("Libraries");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Publisher", b =>
+                {
+                    b.Property<int>("PublisherId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PublisherId"));
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("PublisherId");
+
+                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -308,6 +502,145 @@ namespace ddac_bookmate.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Book", b =>
+                {
+                    b.HasOne("ddac_bookmate.Models.Language", null)
+                        .WithMany("Books")
+                        .HasForeignKey("LanguageId");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.BookAuthor", b =>
+                {
+                    b.HasOne("ddac_bookmate.Models.Author", "Author")
+                        .WithMany("BookAuthors")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ddac_bookmate.Models.Book", "Book")
+                        .WithMany("BookAuthors")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.BookGenre", b =>
+                {
+                    b.HasOne("ddac_bookmate.Models.Book", "Book")
+                        .WithMany("BookGenres")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ddac_bookmate.Models.Genre", "Genre")
+                        .WithMany("BookGenres")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.BookLibrary", b =>
+                {
+                    b.HasOne("ddac_bookmate.Models.Book", "Book")
+                        .WithMany("BookLibraries")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ddac_bookmate.Models.Library", "Library")
+                        .WithMany("BookAuthors")
+                        .HasForeignKey("LibraryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Library");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.BookPublisher", b =>
+                {
+                    b.HasOne("ddac_bookmate.Models.Book", "Book")
+                        .WithMany("BookPublishers")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ddac_bookmate.Models.Publisher", "Publisher")
+                        .WithMany("BookPublishers")
+                        .HasForeignKey("PublisherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Publisher");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Library", b =>
+                {
+                    b.HasOne("ddac_bookmate.Areas.Identity.Data.ddac_bookmateUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ddac_bookmate.Areas.Identity.Data.ddac_bookmateUser", null)
+                        .WithMany("Library")
+                        .HasForeignKey("ddac_bookmateUserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Areas.Identity.Data.ddac_bookmateUser", b =>
+                {
+                    b.Navigation("Library");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Author", b =>
+                {
+                    b.Navigation("BookAuthors");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Book", b =>
+                {
+                    b.Navigation("BookAuthors");
+
+                    b.Navigation("BookGenres");
+
+                    b.Navigation("BookLibraries");
+
+                    b.Navigation("BookPublishers");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Genre", b =>
+                {
+                    b.Navigation("BookGenres");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Language", b =>
+                {
+                    b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Library", b =>
+                {
+                    b.Navigation("BookAuthors");
+                });
+
+            modelBuilder.Entity("ddac_bookmate.Models.Publisher", b =>
+                {
+                    b.Navigation("BookPublishers");
                 });
 #pragma warning restore 612, 618
         }

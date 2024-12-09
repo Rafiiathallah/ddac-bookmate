@@ -11,8 +11,6 @@ namespace ddac_bookmate.Models
         public string? Description { get; set; }
 
         // Navigation properties
-        public ICollection<Book> Books { get; set; }
-        public ICollection<Author> Authors { get; set; }
         public ICollection<BookGenre> BookGenres { get; set; }
     }
 }
