@@ -23,6 +23,15 @@ namespace ddac_bookmate.Controllers
             return View();
         }
 
+        public IActionResult Dashboard()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

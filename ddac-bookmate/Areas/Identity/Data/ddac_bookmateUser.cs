@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ddac_bookmate.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace ddac_bookmate.Areas.Identity.Data;
@@ -11,11 +10,16 @@ public class ddac_bookmateUser : IdentityUser
 {
     [PersonalData]
     public string? CustomerFullName { get; set; }
+
     [PersonalData]
     public int CustomerAge { get; set; }
+
     [PersonalData]
     public string? CustomerAddress { get; set; }
-    [PersonalData]
-    public DateTime CustomerDOB { get; set; }  
-}
 
+    [PersonalData]
+    public DateTime CustomerDOB { get; set; }
+
+    // Navigation Properties
+    public ICollection<Library>? Library { get; set; }          // User's Library
+}

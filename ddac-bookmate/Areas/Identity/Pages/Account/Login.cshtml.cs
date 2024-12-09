@@ -116,8 +116,7 @@ namespace ddac_bookmate.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
-                }
+                    return LocalRedirect(Url.Content("~/Home/Dashboard"));                }
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });

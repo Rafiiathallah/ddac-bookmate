@@ -14,12 +14,40 @@ public class ddac_bookmateContext : IdentityDbContext<ddac_bookmateUser>
     }
 
     public DbSet<Book> BookTable { get; set; }
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<Genre> Genres { get; set; }
+    public DbSet<Publisher> Publishers { get; set; }
+    public DbSet<Language> Languages { get; set; }
+    public DbSet<Library> Libraries { get; set; }
+    public DbSet<BookAuthor> BookAuthors { get; set; }
+    public DbSet<BookPublisher> BookPublishers { get; set; }
+    public DbSet<BookGenre> BookGenres { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
+
+        // Configure relationships
+        builder.Entity<BookAuthor>()
+            .HasKey(ba => new { ba.BookId, ba.AuthorId });
+
+        builder.Entity<BookPublisher>()
+            .HasKey(bp => new { bp.BookId, bp.PublisherId });
+
+        builder.Entity<BookGenre>()
+            .HasKey(bg => new { bg.BookId, bg.GenreId });
+
+        // Configure cascade delete behavior
+        builder.Entity<Library>()
+            .HasOne(l => l.Book)
+            .WithMany(b => b.Libraries)
+            .HasForeignKey(l => l.BookId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Library>()
+            .HasOne(l => l.User)
+            .WithMany()
+            .HasForeignKey(l => l.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
