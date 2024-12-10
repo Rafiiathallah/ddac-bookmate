@@ -2,20 +2,20 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using ddac_bookmate.Areas.Identity.Data;
 
+
 namespace ddac_bookmate.Models
 {
-    public class Library
+    public class Wishlist
     {
         [Key]
-        public int LibraryId { get; set; }
+        public int WishlistId { get; set; }
         public string UserId { get; set; }
         public int BookCount { get; set; }
         public DateTime AddedDate { get; set; } = DateTime.Now;
 
         // Navigation properties
-        public ICollection<BookLibrary> BookAuthors { get; set; }
+        public ICollection<BookWishlist> BookWishlists { get; set; }
 
         public ddac_bookmateUser User { get; set; }
-
     }
 }

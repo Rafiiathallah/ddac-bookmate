@@ -6,8 +6,11 @@
 
 <div class="books-container">
     <div class="books-header">
-        <h1>Discover Books</h1>
-        <a asp-action="AddData" class="explore-btn">Add New Book</a>
+        <div class="header-content">
+            <h1>Discover Books</h1>
+            <p class="sub-header">Explore our collection of amazing books</p>
+        </div>
+        <!-- <a asp-action="AddData" class="explore-btn">Add New Book</a> -->
     </div>
 
     <div class="books-grid">
@@ -24,19 +27,23 @@
                         <span class="language-badge">@(item.Language?.Name ?? "N/A")</span>
                         <span class="price-badge">$@item.BookPrice</span>
                     </p>
-                    <div class="book-actions">
-                        <a asp-action="EditData" asp-route-BookID="@item.BookID" class="edit-btn">
-                            <i class="bi bi-pencil"></i> Edit
-                        </a>
-                        <form asp-action="DeleteData" asp-route-BookId="@item.BookID" class="delete-form">
-                            <button class="delete-btn">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
-                        </form>
-                    </div>
                 </div>
             </div>
         }
+        
+        <!-- More Books Card -->
+        <div class="book-card more-books">
+            <div class="book-cover coming-soon">
+                <i class="bi bi-three-dots"></i>
+            </div>
+            <div class="book-details">
+                <h3>More Books</h3>
+                <p class="book-author">Coming Soon</p>
+                <p class="book-info">
+                    <span class="coming-soon-badge">Stay Tuned!</span>
+                </p>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -48,10 +55,27 @@
 }
 
 .books-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+}
+
+.header-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.books-header h1 {
+    font-size: 2.5rem;
+    color: #1a73e8;
+    margin-bottom: 0.5rem;
+}
+
+.sub-header {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 0;
+    font-weight: 300;
 }
 
 .books-grid {
@@ -148,5 +172,33 @@
 
 .delete-form {
     margin: 0;
+}
+
+.more-books .coming-soon {
+    background: #e8f0fe;
+    border: 2px dashed #1a73e8;
+}
+
+.more-books .coming-soon i {
+    font-size: 2.5rem;
+    color: #1a73e8;
+    opacity: 0.6;
+}
+
+.coming-soon-badge {
+    background: #e8f0fe;
+    color: #1a73e8;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+}
+
+.more-books {
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.more-books:hover {
+    opacity: 1;
 }
 </style>

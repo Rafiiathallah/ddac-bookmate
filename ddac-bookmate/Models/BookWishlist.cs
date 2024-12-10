@@ -3,18 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ddac_bookmate.Models
 {
-    public class BookLibrary
+    public class BookWishlist
     {
         [Key]
-        public int BookLibraryId { get; set; }
+        public int BookWishlistId { get; set; }
         public int BookId { get; set; }
-        public int LibraryId { get; set; }
-        public bool IsFavourite { get; set; } = false;
+        public int WishlistId { get; set; }
 
         // Navigation properties
         [ForeignKey("BookId")]
         public Book Book { get; set; }
-        [ForeignKey("LibraryId")]
-        public Library Library { get; set; }
+        [ForeignKey("WishlistId")]
+        public Wishlist Wishlist { get; set; }
     }
 }
