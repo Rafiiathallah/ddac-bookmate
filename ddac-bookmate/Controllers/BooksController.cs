@@ -16,7 +16,7 @@ namespace ddac_bookmate.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Book> books = await _context.Books.ToListAsync();
+            List<Book> books = await _context.Books.Include(b => b.Language).ToListAsync();
             return View(books);
         }
 

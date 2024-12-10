@@ -1,38 +1,152 @@
 ﻿@model List<Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Books";
 }
 
-<h1>Index</h1>
+<div class="books-container">
+    <div class="books-header">
+        <h1>Discover Books</h1>
+        <a asp-action="AddData" class="explore-btn">Add New Book</a>
+    </div>
 
-<p><a asp-action="AddData">Add Book Record</a></p>
+    <div class="books-grid">
+        @foreach(var item in Model)
+        {
+            <div class="book-card">
+                <div class="book-cover">
+                    <i class="bi bi-book-fill"></i>
+                </div>
+                <div class="book-details">
+                    <h3>@item.BookName</h3>
+                    <p class="book-author">@item.BookAuthor</p>
+                    <p class="book-info">
+                        <span class="language-badge">@(item.Language?.Name ?? "N/A")</span>
+                        <span class="price-badge">$@item.BookPrice</span>
+                    </p>
+                    <div class="book-actions">
+                        <a asp-action="EditData" asp-route-BookID="@item.BookID" class="edit-btn">
+                            <i class="bi bi-pencil"></i> Edit
+                        </a>
+                        <form asp-action="DeleteData" asp-route-BookId="@item.BookID" class="delete-form">
+                            <button class="delete-btn">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 
-<center>
-<table border="1">
-    <tr style="background-color: yellow;">
-        <th>Book ID</th>
-        <th>Book Name</th>
-        <th>Book Author</th>
-        <th>Published Date</th>
-        <th>Price</th>
-        <th>Update Action</th>
-        <th>Delete Action</th>
-        <th></th>
-    </tr>
-    @foreach(var item in Model)
-    {
-        <tr>
-            <td>@item.BookID</td>
-            <td>@item.BookName</td>
-            <td>@item.BookAuthor</td>
-            <td>@item.BookPublishedDate.ToShortDateString()</td>
-            <td>@item.BookPrice</td>
-            <form asp-action="DeleteData" asp-controller="Books" asp-route-BookId="@item.BookID">
-                <td><button>Delete</button></td>
-                <td><button asp-action="EditData" asp-controller="Books" asp-route-BookID="@item.BookID">Edit</button></td>
-            </form>
-        </tr>
-    }
-</table>
-</center>
+<style>
+.books-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.books-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
+}
+
+.book-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s;
+    margin-bottom: 0.5rem;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+}
+
+.book-cover {
+    background: #f5f5f5;
+    width: 150px;
+    height: 225px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-cover i {
+    font-size: 2.5rem;
+    color: #1a73e8;
+    opacity: 0.8;
+}
+
+.book-details h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.book-author {
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+.book-info {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin: 0.5rem 0;
+}
+
+.language-badge, .price-badge {
+    background: #e8f0fe;
+    color: #1a73e8;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+}
+
+.book-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.edit-btn, .delete-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.edit-btn {
+    background: #1a73e8;
+    color: white;
+    text-decoration: none;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.delete-form {
+    margin: 0;
+}
+</style>

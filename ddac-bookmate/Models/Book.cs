@@ -12,6 +12,14 @@ namespace ddac_bookmate.Models
         public DateTime BookPublishedDate { get; set; }
         public decimal BookPrice { get; set; }
 
+        // Foreign key for Language
+        [Required]
+        public int LanguageId { get; set; }
+
+        // Navigation property for Language
+        [ForeignKey("LanguageId")]
+        public Language Language { get; set; }
+
         // Navigation properties
         public ICollection<BookAuthor> BookAuthors { get; set; }
         public ICollection<BookPublisher> BookPublishers { get; set; }

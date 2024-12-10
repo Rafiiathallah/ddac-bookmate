@@ -14,7 +14,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand" asp-area="" asp-controller="@(User.Identity.IsAuthenticated ? "Books" : "Home")" asp-action="Index">
                     📚 Bookmate
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
@@ -22,26 +22,39 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+@*                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        @if (User.Identity.IsAuthenticated)
+                        </li> *@
+                        <!-- @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link btn btn-primary text-white" asp-area="" asp-controller="Books" asp-action="Index">View Book List</a>
                             </li>
-                        }
+                        } -->
                     </ul>
                     @if (User.Identity.IsAuthenticated)
                     {
                         <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <span class="nav-link">Hello @User.Identity.Name!</span>
-                            </li>
-                            <li class="nav-item">
-                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <button type="submit" class="nav-link btn btn-primary text-white">Logout</button>
-                                </form>
+                            <li class="nav-item dropdown">
+                                <div class="profile-avatar" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li class="dropdown-header">Hello @User.Identity.Name!</li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="/Identity/Account/Manage">
+                                            <i class="bi bi-gear"></i> Profile Settings
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form class="dropdown-item-form" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="bi bi-box-arrow-right"></i> Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     }
@@ -64,5 +77,77 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <style>
+    .profile-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e8f0fe;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .profile-avatar:hover {
+        background: #d2e3fc;
+    }
+
+    .profile-avatar i {
+        font-size: 1.5rem;
+        color: #1a73e8;
+    }
+
+    .dropdown-menu {
+        padding: 0.5rem 0;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        min-width: 200px;
+    }
+
+    .dropdown-header {
+        padding: 0.5rem 1rem;
+        color: #666;
+        font-weight: 500;
+    }
+
+    .dropdown-item {
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #333;
+    }
+
+    .dropdown-item:hover {
+        background: #f8f9fa;
+    }
+
+    .dropdown-item i {
+        color: #1a73e8;
+    }
+
+    .dropdown-item-form {
+        margin: 0;
+    }
+
+    .dropdown-item-form button {
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #333;
+    }
+
+    .dropdown-item-form button:hover {
+        background: #f8f9fa;
+    }
+    </style>
 </body>
 </html>

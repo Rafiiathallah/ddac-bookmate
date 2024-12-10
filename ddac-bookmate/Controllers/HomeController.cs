@@ -25,11 +25,7 @@ namespace ddac_bookmate.Controllers
 
         public IActionResult Dashboard()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index");
-            }
-            return View();
+            return RedirectToAction("Index", "Books");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
