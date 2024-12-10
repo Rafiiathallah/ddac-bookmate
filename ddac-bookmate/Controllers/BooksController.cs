@@ -100,5 +100,24 @@ namespace ddac_bookmate.Controllers
             return RedirectToAction("Index", "Books");
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var book = await _context.Books
+                .Include(b => b.Language)
+                .Include(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                .Include(b => b.BookPublishers)
+                    .ThenInclude(bp => bp.Publisher)
+                .FirstOrDefaultAsync(b => b.BookID == id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["SelectedBook"] = book;
+            return View("Index", await _context.Books.Include(b => b.Language).ToListAsync());
+        }
+
     }
 }

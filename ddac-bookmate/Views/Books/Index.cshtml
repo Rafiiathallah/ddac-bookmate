@@ -10,24 +10,29 @@
             <h1>Discover Books</h1>
             <p class="sub-header">Explore our collection of amazing books</p>
         </div>
-        <!-- <a asp-action="AddData" class="explore-btn">Add New Book</a> -->
     </div>
 
     <div class="books-grid">
         @foreach(var item in Model)
         {
             <div class="book-card">
-                <div class="book-cover">
-                    <i class="bi bi-book-fill"></i>
-                </div>
-                <div class="book-details">
-                    <h3>@item.BookName</h3>
-                    <p class="book-author">@item.BookAuthor</p>
-                    <p class="book-info">
-                        <span class="language-badge">@(item.Language?.Name ?? "N/A")</span>
-                        <span class="price-badge">$@item.BookPrice</span>
-                    </p>
-                </div>
+                @using (Html.BeginForm("Details", "Books", FormMethod.Get))
+                {
+                    <input type="hidden" name="id" value="@item.BookID" />
+                    <button type="submit" class="book-card-button">
+                        <div class="book-cover">
+                            <div class="book-title-preview">@item.BookName</div>
+                        </div>
+                        <div class="book-details">
+                            <h3>@item.BookName</h3>
+                            <p class="book-author">@item.BookAuthor</p>
+                            <p class="book-info">
+                                <span class="language-badge">@(item.Language?.Name ?? "N/A")</span>
+                                <span class="price-badge">$@item.BookPrice</span>
+                            </p>
+                        </div>
+                    </button>
+                }
             </div>
         }
         
@@ -45,6 +50,60 @@
             </div>
         </div>
     </div>
+
+    @if (ViewData["SelectedBook"] != null)
+    {
+        var book = (Book)ViewData["SelectedBook"];
+        <div class="book-details-panel @(ViewData["SelectedBook"] != null ? "active" : "")">
+            <div class="details-content">
+                <div class="details-header">
+                    <h2>@book.BookName</h2>
+                    @using (Html.BeginForm("Index", "Books", FormMethod.Get))
+                    {
+                        <button type="submit" class="close-button">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    }
+                </div>
+                
+                <div class="book-cover-large">
+                    <div class="book-title-preview">@book.BookName</div>
+                </div>
+
+                <div class="book-info-detailed">
+                    <p class="author">By @book.BookAuthor</p>
+                    <p class="synopsis">@book.Synopsis</p>
+                    
+                    <div class="badges">
+                        <span class="badge">@book.Language?.Name</span>
+                        @foreach(var genre in book.BookGenres.Select(bg => bg.Genre))
+                        {
+                            <span class="badge">@genre.Name</span>
+                        }
+                    </div>
+
+                    <div class="price-section">
+                        <span class="price">$@book.BookPrice</span>
+                        <div class="action-buttons">
+                            <button class="buy-button">Buy Now</button>
+                            <button class="wishlist-button">
+                                <i class="bi bi-heart"></i>
+                                Add to Wishlist
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="publication-info">
+                        <p>Published: @book.BookPublishedDate.ToString("MMMM dd, yyyy")</p>
+                        @if (book.BookPublishers.Any())
+                        {
+                            <p>Publisher: @book.BookPublishers.First().Publisher.Name</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 <style>
@@ -91,7 +150,6 @@
     align-items: center;
     text-align: center;
     transition: transform 0.2s;
-    margin-bottom: 0.5rem;
 }
 
 .book-card:hover {
@@ -99,7 +157,7 @@
 }
 
 .book-cover {
-    background: #f5f5f5;
+    background: linear-gradient(145deg, #1a73e8, #1557b0);
     width: 150px;
     height: 225px;
     border-radius: 8px;
@@ -108,6 +166,8 @@
     justify-content: center;
     margin: 0 auto 1rem auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    color: white;
 }
 
 .book-cover i {
@@ -116,15 +176,20 @@
     opacity: 0.8;
 }
 
-.book-details h3 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: #333;
+.book-details {
+    text-align: center;
+    margin-top: 1rem;
 }
 
-.book-author {
+.book-details h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.book-author, .book-info {
+    font-size: 1rem;
     color: #666;
-    margin: 0.5rem 0;
+    margin: 0.2rem 0;
 }
 
 .book-info {
@@ -175,14 +240,14 @@
 }
 
 .more-books .coming-soon {
-    background: #e8f0fe;
-    border: 2px dashed #1a73e8;
+    background: linear-gradient(145deg, #e8f0fe, #c8d9f3);
+    border: none;
 }
 
 .more-books .coming-soon i {
     font-size: 2.5rem;
-    color: #1a73e8;
-    opacity: 0.6;
+    color: white;
+    opacity: 0.8;
 }
 
 .coming-soon-badge {
@@ -200,5 +265,168 @@
 
 .more-books:hover {
     opacity: 1;
+}
+
+.book-card-button {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+}
+
+.book-details-panel {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 40%;
+    height: 100vh;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.book-details-panel.active {
+    left: 0;
+}
+
+.details-content {
+    padding: 2rem;
+}
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.book-cover-large {
+    background: linear-gradient(145deg, #1a73e8, #1557b0);
+    width: 250px;
+    height: 375px;
+    margin: 0 auto 2rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    color: white;
+}
+
+.book-cover-large i {
+    font-size: 4rem;
+    color: #1a73e8;
+}
+
+.book-info-detailed {
+    text-align: center;
+}
+
+.author {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.synopsis {
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.badge {
+    background: #e8f0fe;
+    color: #1a73e8;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.price-section {
+    margin: 2rem 0;
+}
+
+.price {
+    font-size: 2rem;
+    color: #1a73e8;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.buy-button, .wishlist-button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.2s;
+}
+
+.buy-button {
+    background: #1a73e8;
+    color: white;
+}
+
+.wishlist-button {
+    background: #f5f5f5;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.buy-button:hover, .wishlist-button:hover {
+    transform: translateY(-2px);
+}
+
+.publication-info {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
+.book-title-preview {
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: center;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+}
+
+.book-cover-large .book-title-preview {
+    font-size: 1.8rem;
+    -webkit-line-clamp: 6;
 }
 </style>
