@@ -23,6 +23,8 @@ public class ddac_bookmateContext : IdentityDbContext<ddac_bookmateUser>
     public DbSet<BookPublisher> BookPublishers { get; set; }
     public DbSet<BookGenre> BookGenres { get; set; }
     public DbSet<BookLibrary> BookLibraries { get; set; }
+    public DbSet<Wishlist> Wishlists { get; set; }
+    public DbSet<BookWishlist> BookWishlists { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -94,6 +96,29 @@ public class ddac_bookmateContext : IdentityDbContext<ddac_bookmateUser>
             .HasOne(l => l.User)
             .WithMany()
             .HasForeignKey(l => l.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Add Wishlist configurations
+        builder.Entity<BookWishlist>()
+            .HasKey(bw => new { bw.BookId, bw.WishlistId });
+
+        builder.Entity<BookWishlist>()
+            .HasOne(bw => bw.Book)
+            .WithMany(b => b.BookWishlists)
+            .HasForeignKey(bw => bw.BookId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<BookWishlist>()
+            .HasOne(bw => bw.Wishlist)
+            .WithMany(w => w.BookWishlists)
+            .HasForeignKey(bw => bw.WishlistId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Configure User relationship for Wishlist
+        builder.Entity<Wishlist>()
+            .HasOne(w => w.User)
+            .WithMany()
+            .HasForeignKey(w => w.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
