@@ -710,7 +710,7 @@ h2.register-subtitle {
   box-shadow: 0 2px 4px rgba(26, 115, 232, 0.2);
 }
 
-/* Container styling for the nav pills */
+/* Container styling for the nav pills.*/
 .nav-pills.flex-column {
   background: rgba(255, 255, 255, 0.3);
   padding: 1rem;
