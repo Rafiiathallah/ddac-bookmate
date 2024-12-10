@@ -106,6 +106,8 @@ namespace ddac_bookmate.Controllers
                 .Include(b => b.Language)
                 .Include(b => b.BookGenres)
                     .ThenInclude(bg => bg.Genre)
+                .Include(b => b.BookAuthors)
+                    .ThenInclude(ba => ba.Author)
                 .Include(b => b.BookPublishers)
                     .ThenInclude(bp => bp.Publisher)
                 .FirstOrDefaultAsync(b => b.BookID == id);

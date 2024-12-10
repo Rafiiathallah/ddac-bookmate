@@ -25,6 +25,8 @@ public class ddac_bookmateContext : IdentityDbContext<ddac_bookmateUser>
     public DbSet<BookLibrary> BookLibraries { get; set; }
     public DbSet<Wishlist> Wishlists { get; set; }
     public DbSet<BookWishlist> BookWishlists { get; set; }
+    public DbSet<Cart> Carts { get; set; }
+    public DbSet<BookCart> BookCarts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -120,5 +122,34 @@ public class ddac_bookmateContext : IdentityDbContext<ddac_bookmateUser>
             .WithMany()
             .HasForeignKey(w => w.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // Add Cart configurations
+        builder.Entity<Cart>()
+            .HasOne<ddac_bookmateUser>()
+            .WithMany()
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Add BookCart configurations
+        builder.Entity<BookCart>()
+            .HasOne(bc => bc.Book)
+            .WithMany(b => b.BookCarts)
+            .HasForeignKey(bc => bc.BookId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<BookCart>()
+            .HasOne(bc => bc.Cart)
+            .WithMany(c => c.BookCarts)
+            .HasForeignKey(bc => bc.CartId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Configure decimal precision for prices
+        builder.Entity<Cart>()
+            .Property(c => c.TotalPrice)
+            .HasPrecision(18, 2);
+
+        builder.Entity<BookCart>()
+            .Property(bc => bc.UnitPrice)
+            .HasPrecision(18, 2);
     }
 }

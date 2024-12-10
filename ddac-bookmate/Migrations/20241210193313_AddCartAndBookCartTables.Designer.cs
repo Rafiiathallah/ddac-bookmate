@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ddac_bookmate.Data;
@@ -11,9 +12,11 @@ using ddac_bookmate.Data;
 namespace ddac_bookmate.Migrations
 {
     [DbContext(typeof(ddac_bookmateContext))]
-    partial class ddac_bookmateContextModelSnapshot : ModelSnapshot
+    [Migration("20241210193313_AddCartAndBookCartTables")]
+    partial class AddCartAndBookCartTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,36 +323,6 @@ namespace ddac_bookmate.Migrations
                     b.ToTable("BookAuthors");
                 });
 
-            modelBuilder.Entity("ddac_bookmate.Models.BookCart", b =>
-                {
-                    b.Property<int>("BookCartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BookCartId"));
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("BookCartId");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("CartId");
-
-                    b.ToTable("BookCarts");
-                });
-
             modelBuilder.Entity("ddac_bookmate.Models.BookGenre", b =>
                 {
                     b.Property<int>("BookId")
@@ -423,32 +396,6 @@ namespace ddac_bookmate.Migrations
                     b.HasIndex("WishlistId");
 
                     b.ToTable("BookWishlists");
-                });
-
-            modelBuilder.Entity("ddac_bookmate.Models.Cart", b =>
-                {
-                    b.Property<int>("CartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CartId"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("CartId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("ddac_bookmate.Models.Genre", b =>
@@ -648,25 +595,6 @@ namespace ddac_bookmate.Migrations
                     b.Navigation("Book");
                 });
 
-            modelBuilder.Entity("ddac_bookmate.Models.BookCart", b =>
-                {
-                    b.HasOne("ddac_bookmate.Models.Book", "Book")
-                        .WithMany("BookCarts")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ddac_bookmate.Models.Cart", "Cart")
-                        .WithMany("BookCarts")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Cart");
-                });
-
             modelBuilder.Entity("ddac_bookmate.Models.BookGenre", b =>
                 {
                     b.HasOne("ddac_bookmate.Models.Book", "Book")
@@ -743,15 +671,6 @@ namespace ddac_bookmate.Migrations
                     b.Navigation("Wishlist");
                 });
 
-            modelBuilder.Entity("ddac_bookmate.Models.Cart", b =>
-                {
-                    b.HasOne("ddac_bookmate.Areas.Identity.Data.ddac_bookmateUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ddac_bookmate.Models.Library", b =>
                 {
                     b.HasOne("ddac_bookmate.Areas.Identity.Data.ddac_bookmateUser", "User")
@@ -792,8 +711,6 @@ namespace ddac_bookmate.Migrations
                 {
                     b.Navigation("BookAuthors");
 
-                    b.Navigation("BookCarts");
-
                     b.Navigation("BookGenres");
 
                     b.Navigation("BookLibraries");
@@ -801,11 +718,6 @@ namespace ddac_bookmate.Migrations
                     b.Navigation("BookPublishers");
 
                     b.Navigation("BookWishlists");
-                });
-
-            modelBuilder.Entity("ddac_bookmate.Models.Cart", b =>
-                {
-                    b.Navigation("BookCarts");
                 });
 
             modelBuilder.Entity("ddac_bookmate.Models.Genre", b =>

@@ -76,6 +76,22 @@
                         <span class="separator">・</span>
                         <span class="published-date">@book.BookPublishedDate.ToString("MMMM dd, yyyy")</span>
                     </p>
+                    <div class="rating-container">
+                        <div class="stars">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= book.StarRating)
+                                {
+                                    <i class="bi bi-star-fill"></i> <!-- Solid star -->
+                                }
+                                else
+                                {
+                                    <i class="bi bi-star"></i> <!-- Hollow star -->
+                                }
+                            }
+                        </div>
+                        <span class="rating-number">@book.StarRating</span>
+                    </div>
                     <p class="synopsis">@book.Synopsis</p>
                     
                     <div class="badges">
@@ -103,18 +119,21 @@
 
                     <div class="tags-section">
                         <div class="tag-group">
-                            <span class="tag-label">Author:</span>
+                            <span class="tag-label">Authors:</span>
                             <div class="tag-badges">
-                                <span class="tag-badge">@book.BookAuthor</span>
+                                @foreach (var bookAuthor in book.BookAuthors)
+                                {
+                                    <span class="tag-badge">@bookAuthor.Author.Name</span>
+                                }
                             </div>
                         </div>
                         
                         <div class="tag-group">
                             <span class="tag-label">Publishers:</span>
                             <div class="tag-badges">
-                                @foreach (var publisher in book.BookPublishers)
+                                @foreach (var bookPublisher in book.BookPublishers)
                                 {
-                                    <span class="tag-badge">@publisher.Publisher.Name</span>
+                                    <span class="tag-badge">@bookPublisher.Publisher.Name</span>
                                 }
                             </div>
                         </div>
@@ -562,5 +581,29 @@
     border-color: #60a5fa;
     background: white;
     color: #60a5fa;
+}
+
+.rating-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 0.5rem 0 1rem 0;
+}
+
+.stars {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.stars i {
+    color: #ffd700; /* Golden color for stars */
+    font-size: 1.2rem;
+}
+
+.rating-number {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #60a5fa; /* Matching your theme color */
 }
 </style>

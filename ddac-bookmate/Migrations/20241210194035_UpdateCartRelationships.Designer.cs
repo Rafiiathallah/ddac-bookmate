@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ddac_bookmate.Data;
@@ -11,9 +12,11 @@ using ddac_bookmate.Data;
 namespace ddac_bookmate.Migrations
 {
     [DbContext(typeof(ddac_bookmateContext))]
-    partial class ddac_bookmateContextModelSnapshot : ModelSnapshot
+    [Migration("20241210194035_UpdateCartRelationships")]
+    partial class UpdateCartRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
