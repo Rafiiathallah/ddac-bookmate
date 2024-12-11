@@ -12,7 +12,14 @@ namespace ddac_bookmate.Models
         public string UserId { get; set; }  // To link with the user
         
         [Column(TypeName = "decimal(18,2)")]
-        public decimal TotalPrice { get; set; } = 0;  // Default to 0
+        public decimal TotalPrice 
+        { 
+            get
+            {
+                return BookCarts?.Sum(bc => bc.UnitPrice * bc.Quantity) ?? 0;
+            }
+            set { } // Keep the setter for EF Core
+        }
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         

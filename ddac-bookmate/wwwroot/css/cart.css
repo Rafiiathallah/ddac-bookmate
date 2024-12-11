@@ -49,8 +49,8 @@
 }
 
 .book-cover {
-  width: 70px;
-  height: 105px;
+  width: 80px;
+  height: 130px;
   background: linear-gradient(145deg, #1a73e8, #1557b0);
   border-radius: 8px;
   display: flex;
@@ -213,4 +213,44 @@
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
+}
+
+.subtotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.cart-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.add-more-btn {
+  background: #1a73e8;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  flex: 0 0 auto;
+}
+
+.add-more-btn:hover {
+  background: #1557b0;
+  transform: translateY(-2px);
+}
+
+.checkout-btn {
+  flex: 1;
 }

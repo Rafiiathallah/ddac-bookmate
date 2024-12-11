@@ -803,3 +803,24 @@ h2.register-subtitle {
   font-size: 1.2rem;
   color: #1a73e8;
 }
+
+.burger-menu {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #1a73e8;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.burger-menu:hover {
+  color: #1557b0;
+}
+
+.burger-menu i {
+  line-height: 1;
+}

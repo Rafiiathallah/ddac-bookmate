@@ -58,10 +58,16 @@
                     <span>Subtotal</span>
                     <span>$@Model.TotalPrice.ToString("F2")</span>
                 </div>
-                <button class="checkout-btn">
-                    <i class="bi bi-credit-card"></i>
-                    Proceed to Checkout
-                </button>
+                <div class="cart-actions">
+                    <a asp-controller="Books" asp-action="Index" class="add-more-btn">
+                        <i class="bi bi-plus-lg"></i>
+                        Add More Books
+                    </a>
+                    <button class="checkout-btn">
+                        <i class="bi bi-credit-card"></i>
+                        Proceed to Checkout
+                    </button>
+                </div>
             </div>
         </div>
     }
