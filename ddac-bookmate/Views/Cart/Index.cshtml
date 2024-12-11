@@ -1,0 +1,104 @@
+@model Cart
+
+<div class="cart-page-container">
+    <div class="cart-header">
+        <h1>Shopping Cart</h1>
+        <p class="cart-summary">@(Model?.BookCarts?.Count ?? 0) items in your cart</p>
+    </div>
+
+    @if (Model?.BookCarts?.Any() == true)
+    {
+        <div class="cart-content">
+            <div class="cart-items">
+                @foreach (var item in Model.BookCarts)
+                {
+                    <div class="cart-item">
+                        <div class="item-cover">
+                            <div class="book-title-preview">@item.Book.BookName</div>
+                        </div>
+                        <div class="item-details">
+                            <h3>@item.Book.BookName</h3>
+                            <p class="item-author">@item.Book.BookAuthor</p>
+                            <div class="item-price">$@item.UnitPrice</div>
+                            <div class="item-actions">
+                                <div class="quantity-control">
+                                    <form asp-action="UpdateQuantity" method="post" class="quantity-form">
+                                        <input type="hidden" name="bookCartId" value="@item.BookCartId" />
+                                        <button type="button" class="quantity-btn" onclick="decrementQuantity(this)">-</button>
+                                        <input type="number" name="quantity" value="@item.Quantity" min="1" max="99" class="quantity-input" />
+                                        <button type="button" class="quantity-btn" onclick="incrementQuantity(this)">+</button>
+                                    </form>
+                                </div>
+                                <form asp-action="RemoveItem" method="post" class="remove-form">
+                                    <input type="hidden" name="bookCartId" value="@item.BookCartId" />
+                                    <button type="submit" class="remove-btn">
+                                        <i class="bi bi-trash"></i>
+                                        Remove
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="cart-summary-panel">
+                <h3>Order Summary</h3>
+                <div class="summary-details">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>$@Model.TotalPrice</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span>Free</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span>$@Model.TotalPrice</span>
+                    </div>
+                </div>
+                <button class="checkout-btn">
+                    Proceed to Checkout
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-cart">
+            <i class="bi bi-cart-x"></i>
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added any books yet.</p>
+            <a asp-controller="Books" asp-action="Index" class="browse-books-btn">
+                Browse Books
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function updateQuantity(input) {
+            input.closest('form').submit();
+        }
+
+        function incrementQuantity(btn) {
+            const input = btn.parentElement.querySelector('.quantity-input');
+            if (input.value < 99) {
+                input.value = parseInt(input.value) + 1;
+                updateQuantity(input);
+            }
+        }
+
+        function decrementQuantity(btn) {
+            const input = btn.parentElement.querySelector('.quantity-input');
+            if (input.value > 1) {
+                input.value = parseInt(input.value) - 1;
+                updateQuantity(input);
+            }
+        }
+    </script>
+} 
