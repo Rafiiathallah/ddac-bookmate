@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ddac_bookmate.styles.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
@@ -43,7 +44,7 @@
                                     </div>
                                 </a>
                             </li>
-                            <li class="nav-item dropdown">
+                            <li class="nav-item">
                                 <div class="profile-avatar" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-person-circle"></i>
                                 </div>

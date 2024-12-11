@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ddac_bookmate.Models;
 using Microsoft.AspNetCore.Authorization;
 using ddac_bookmate.Data;
+using System.Security.Claims;
 
 namespace ddac_bookmate.Controllers
 {
@@ -18,7 +19,7 @@ namespace ddac_bookmate.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userId = User.Identity.Name;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var cart = await _context.Carts
                 .Include(c => c.BookCarts)
                     .ThenInclude(bc => bc.Book)
@@ -31,19 +32,34 @@ namespace ddac_bookmate.Controllers
         public async Task<IActionResult> UpdateQuantity(int bookCartId, int quantity)
         {
             var bookCart = await _context.BookCarts.FindAsync(bookCartId);
-            if (bookCart != null)
+            if (bookCart == null)
+            {
+                return NotFound();
+            }
+
+            if (quantity <= 0)
+            {
+                // Remove item if quantity is 0 or less
+                _context.BookCarts.Remove(bookCart);
+            }
+            else
             {
                 bookCart.Quantity = quantity;
-                await _context.SaveChangesAsync();
-                
-                // Recalculate cart total
-                var cart = await _context.Carts
-                    .Include(c => c.BookCarts)
-                    .FirstOrDefaultAsync(c => c.CartId == bookCart.CartId);
-                    
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Recalculate cart total
+            var cart = await _context.Carts
+                .Include(c => c.BookCarts)
+                .FirstOrDefaultAsync(c => c.CartId == bookCart.CartId);
+
+            if (cart != null)
+            {
                 cart.TotalPrice = cart.BookCarts.Sum(bc => bc.UnitPrice * bc.Quantity);
                 await _context.SaveChangesAsync();
             }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -62,7 +78,7 @@ namespace ddac_bookmate.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToCart(int bookId)
         {
-            var userId = User.Identity.Name;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var cart = await _context.Carts
                 .Include(c => c.BookCarts)
                 .FirstOrDefaultAsync(c => c.UserId == userId);

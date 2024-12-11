@@ -106,10 +106,13 @@
                         <span class="price">$@book.BookPrice</span>
                         <div class="action-buttons">
                             <button class="buy-button">Buy Now</button>
-                            <button class="cart-button">
-                                <i class="bi bi-cart-plus"></i>
-                                Add to Cart
-                            </button>
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" style="margin: 0;">
+                                <input type="hidden" name="bookId" value="@book.BookID" />
+                                <button type="submit" class="cart-button">
+                                    <i class="bi bi-cart-plus"></i>
+                                    Add to Cart
+                                </button>
+                            </form>
                             <button class="wishlist-button">
                                 <i class="bi bi-heart"></i>
                                 Add to Wishlist

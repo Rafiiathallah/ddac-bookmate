@@ -1,3 +1,7 @@
+@section Styles {
+    <link rel="stylesheet" href="~/css/cart.css" />
+}
+
 @model Cart
 
 <div class="cart-container">
@@ -13,27 +17,51 @@
             {
                 <div class="cart-item">
                     <div class="book-cover">
-                        <div class="book-title-preview">@item.Book.BookName</div>
+                        <i class="bi bi-book me-1"></i>
+                        <div class="book-title-preview">
+                            @{
+                                var title = item.Book.BookName;
+                                var words = title.Split(' ');
+                                var maxWords = 3; // Limit to 3 words
+                                var displayWords = words.Take(maxWords);
+                                var displayText = string.Join(" ", displayWords);
+                                if (words.Length > maxWords)
+                                {
+                                    displayText += "...";
+                                }
+                            }
+                            @displayText
+                        </div>
                     </div>
                     <div class="item-details">
                         <h3>@item.Book.BookName</h3>
                         <p class="item-author">@item.Book.BookAuthor</p>
-                        <div class="item-price">$@item.UnitPrice</div>
+                        <div class="item-price">$@item.UnitPrice.ToString("F2")</div>
                         <div class="quantity-controls">
-                            <button class="quantity-btn">-</button>
-                            <span>@item.Quantity</span>
-                            <button class="quantity-btn">+</button>
+                            <form asp-action="UpdateQuantity" method="post" class="d-inline">
+                                <input type="hidden" name="bookCartId" value="@item.BookCartId" />
+                                <input type="hidden" name="quantity" value="@(item.Quantity - 1)" />
+                                <button type="submit" class="quantity-btn">-</button>
+                            </form>
+                            <span class="quantity">@item.Quantity</span>
+                            <form asp-action="UpdateQuantity" method="post" class="d-inline">
+                                <input type="hidden" name="bookCartId" value="@item.BookCartId" />
+                                <input type="hidden" name="quantity" value="@(item.Quantity + 1)" />
+                                <button type="submit" class="quantity-btn">+</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             }
-
-            <div class="cart-summary">
+            <div class="cart-footer">
                 <div class="subtotal">
                     <span>Subtotal</span>
-                    <span>$@Model.TotalPrice</span>
+                    <span>$@Model.TotalPrice.ToString("F2")</span>
                 </div>
-                <button class="checkout-btn">Checkout</button>
+                <button class="checkout-btn">
+                    <i class="bi bi-credit-card"></i>
+                    Proceed to Checkout
+                </button>
             </div>
         </div>
     }
@@ -46,4 +74,4 @@
             <a asp-controller="Books" asp-action="Index" class="browse-btn">Browse Books</a>
         </div>
     }
-</div> 
+</div>
