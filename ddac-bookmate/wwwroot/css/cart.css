@@ -173,12 +173,10 @@
   background: white;
 }
 
+.add-more-btn,
 .checkout-btn {
-  flex: 1;
-  background: white;
-  color: #1a73e8;
-  border: 2px solid #1a73e8;
-  padding: 0.75rem 1.25rem;
+  height: 42px;
+  padding: 0 1.25rem;
   border-radius: 0.5rem;
   font-size: 0.9rem;
   font-weight: 500;
@@ -189,6 +187,25 @@
   gap: 0.5rem;
   transition: all 0.2s ease;
   text-decoration: none;
+}
+
+.add-more-btn {
+  background: #1a73e8;
+  color: white;
+  border: none;
+  flex: 0 0 auto;
+}
+
+.add-more-btn:hover {
+  background: #1557b0;
+  transform: translateY(-2px);
+}
+
+.checkout-btn {
+  background: white;
+  color: #1a73e8;
+  border: 2px solid #1a73e8;
+  flex: 1;
 }
 
 .checkout-btn:hover {
@@ -228,31 +245,4 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-}
-
-.add-more-btn {
-  background: #1a73e8;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  flex: 0 0 auto;
-}
-
-.add-more-btn:hover {
-  background: #1557b0;
-  transform: translateY(-2px);
-}
-
-.checkout-btn {
-  flex: 1;
 }
