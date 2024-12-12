@@ -113,10 +113,13 @@
                                     Add to Cart
                                 </button>
                             </form>
-                            <button class="wishlist-button">
-                                <i class="bi bi-heart"></i>
-                                Add to Wishlist
-                            </button>
+                            <form asp-controller="Wishlist" asp-action="AddToWishlist" method="post" style="margin: 0;">
+                                <input type="hidden" name="bookId" value="@book.BookID" />
+                                <button type="submit" class="wishlist-button">
+                                    <i class="bi bi-heart"></i>
+                                    Add to Wishlist
+                                </button>
+                            </form>
                         </div>
                     </div>
 

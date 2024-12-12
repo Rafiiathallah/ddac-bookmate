@@ -824,3 +824,15 @@ h2.register-subtitle {
 .burger-menu i {
   line-height: 1;
 }
+
+.wishlist-icon {
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  color: #1a73e8;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.wishlist-icon:hover {
+  color: #1557b0;
+}

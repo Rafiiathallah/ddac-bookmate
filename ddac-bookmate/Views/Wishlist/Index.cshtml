@@ -1,0 +1,57 @@
+@section Styles {
+    <link rel="stylesheet" href="~/css/wishlist.css" />
+}
+
+@model Wishlist
+
+<div class="wishlist-container">
+    <div class="wishlist-header">
+        <h1>My Wishlist</h1>
+        <p class="wishlist-summary">@(Model?.BookWishlists?.Count ?? 0) items in your wishlist</p>
+    </div>
+
+    @if (Model?.BookWishlists?.Any() == true)
+    {
+        <div class="wishlist-items">
+            @foreach (var item in Model.BookWishlists)
+            {
+                <div class="wishlist-item">
+                    <div class="item-details">
+                        <div class="book-cover">
+                            <i class="bi bi-book"></i>
+                        </div>
+                        <div class="book-info">
+                            <h3>@item.Book.BookName</h3>
+                            <p class="book-author">by @item.Book.BookAuthor</p>
+                            <div class="item-price">$@item.Book.BookPrice.ToString("F2")</div>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                            <input type="hidden" name="bookId" value="@item.BookId" />
+                            <button type="submit" class="add-to-cart-btn">
+                                <i class="bi bi-cart-plus"></i>
+                                Add to Cart
+                            </button>
+                        </form>
+                        <form asp-controller="Wishlist" asp-action="RemoveFromWishlist" method="post" class="d-inline">
+                            <input type="hidden" name="bookId" value="@item.BookId" />
+                            <button type="submit" class="remove-btn">
+                                <i class="bi bi-trash"></i>
+                                Remove
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-wishlist">
+            <i class="bi bi-heart"></i>
+            <p>Your wishlist is empty</p>
+            <a asp-controller="Books" asp-action="Index" class="browse-books-btn">Browse Books</a>
+        </div>
+    }
+</div>
