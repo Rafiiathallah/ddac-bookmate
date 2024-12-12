@@ -181,5 +181,121 @@ namespace ddac_bookmate.Controllers
 
             return RedirectToAction("Index", "Library");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var cart = await _context.Carts
+                .Include(c => c.BookCarts)
+                    .ThenInclude(bc => bc.Book)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (cart == null || !cart.BookCarts.Any())
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(cart);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ProcessPayment()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            // Simulate payment processing delay
+            await Task.Delay(1000);
+            
+            // Add books to library (existing logic)
+            var cart = await _context.Carts
+                .Include(c => c.BookCarts)
+                    .ThenInclude(bc => bc.Book)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            var library = await _context.Libraries
+                .Include(l => l.BookAuthors)
+                .FirstOrDefaultAsync(l => l.UserId == userId);
+
+            if (library == null)
+            {
+                library = new Library 
+                { 
+                    UserId = userId,
+                    BookCount = 0,
+                    AddedDate = DateTime.UtcNow
+                };
+                _context.Libraries.Add(library);
+                await _context.SaveChangesAsync();
+            }
+
+            foreach (var bookCart in cart.BookCarts)
+            {
+                var existingBook = library.BookAuthors?
+                    .FirstOrDefault(ba => ba.BookId == bookCart.BookId);
+
+                if (existingBook == null)
+                {
+                    var bookLibrary = new BookLibrary
+                    {
+                        BookId = bookCart.BookId,
+                        LibraryId = library.LibraryId,
+                        IsFavourite = false
+                    };
+                    _context.BookLibraries.Add(bookLibrary);
+                    library.BookCount++;
+                }
+            }
+
+            // Clear the cart
+            _context.BookCarts.RemoveRange(cart.BookCarts);
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Payment successful! Books added to your library." });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BuyNow(int bookId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var cart = await _context.Carts
+                .Include(c => c.BookCarts)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            // Clear existing cart items
+            if (cart?.BookCarts != null)
+            {
+                _context.BookCarts.RemoveRange(cart.BookCarts);
+            }
+
+            // Create cart if it doesn't exist
+            if (cart == null)
+            {
+                cart = new Cart { UserId = userId };
+                _context.Carts.Add(cart);
+                await _context.SaveChangesAsync();
+            }
+
+            // Get book details
+            var book = await _context.Books.FindAsync(bookId);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            // Add book to cart
+            var bookCart = new BookCart
+            {
+                BookId = bookId,
+                CartId = cart.CartId,
+                Quantity = 1,
+                UnitPrice = book.BookPrice
+            };
+            _context.BookCarts.Add(bookCart);
+            await _context.SaveChangesAsync();
+
+            // Redirect to checkout
+            return RedirectToAction(nameof(Checkout));
+        }
     }
 } 

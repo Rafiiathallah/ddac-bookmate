@@ -179,21 +179,21 @@
 
                     <div class="price-section">
                         <span class="price">$@book.BookPrice</span>
-                        <div class="action-buttons">
-                            <form asp-controller="Library" asp-action="AddToLibrary" method="post" style="margin: 0;">
+                        <div class="book-actions">
+                            <form asp-controller="Cart" asp-action="BuyNow" method="post" style="margin: 0;">
                                 <input type="hidden" name="bookId" value="@book.BookID" />
-                                <button type="submit" class="buy-button">Buy Now</button>
+                                <button type="submit" class="buy-button action-button">Buy Now</button>
                             </form>
                             <form asp-controller="Cart" asp-action="AddToCart" method="post" style="margin: 0;">
                                 <input type="hidden" name="bookId" value="@book.BookID" />
-                                <button type="submit" class="cart-button">
+                                <button type="submit" class="cart-button action-button">
                                     <i class="bi bi-cart-plus"></i>
                                     Add to Cart
                                 </button>
                             </form>
                             <form asp-controller="Wishlist" asp-action="AddToWishlist" method="post" style="margin: 0;">
                                 <input type="hidden" name="bookId" value="@book.BookID" />
-                                <button type="submit" class="wishlist-button">
+                                <button type="submit" class="wishlist-button action-button">
                                     <i class="bi bi-heart"></i>
                                     Add to Wishlist
                                 </button>
@@ -365,7 +365,9 @@
 .book-actions {
     display: flex;
     gap: 1rem;
-    margin-top: 1rem;
+    justify-content: center;
+    width: 100%;
+    margin-top: 1.5rem;
 }
 
 .edit-btn, .delete-btn {
@@ -929,6 +931,21 @@
     font-size: 1rem;
 }
 
+.action-button {
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
 .price-badge {
     background: #60a5fa;
     color: white;
@@ -946,3 +963,7 @@
     flex-wrap: nowrap;
 }
 </style>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/books.css" />
+}

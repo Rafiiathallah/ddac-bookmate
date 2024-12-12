@@ -174,13 +174,13 @@
 }
 
 .checkout-btn {
-  width: 100%;
-  background: #f8fafc;
-  color: #1f2937;
-  border: none;
-  padding: 0.75rem;
+  flex: 1;
+  background: white;
+  color: #1a73e8;
+  border: 2px solid #1a73e8;
+  padding: 0.75rem 1.25rem;
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -188,11 +188,13 @@
   justify-content: center;
   gap: 0.5rem;
   transition: all 0.2s ease;
+  text-decoration: none;
 }
 
 .checkout-btn:hover {
+  background: #1a73e8;
+  color: white;
   transform: translateY(-2px);
-  background: white;
 }
 
 .checkout-btn i {
