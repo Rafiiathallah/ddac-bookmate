@@ -20,6 +20,10 @@ namespace ddac_bookmate.Controllers
                         .Include(b => b.Language)
                         .Include(b => b.BookGenres)
                             .ThenInclude(bg => bg.Genre)
+                        .Include(b => b.BookAuthors)
+                            .ThenInclude(ba => ba.Author)
+                        .Include(b => b.BookPublishers)
+                            .ThenInclude(bp => bp.Publisher)
                         select b;
 
             // Apply filters
@@ -71,7 +75,7 @@ namespace ddac_bookmate.Controllers
                 .OrderByDescending(b => b.IsTrending)
                 .ThenBy(b => b.BookName);
 
-            return View(await books.ToListAsync());
+            return View(await books.AsNoTracking().ToListAsync());
         }
 
         //public IActionResult Index()
@@ -156,7 +160,7 @@ namespace ddac_bookmate.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var book = await _context.Books
+            var selectedBook = await _context.Books
                 .Include(b => b.Language)
                 .Include(b => b.BookGenres)
                     .ThenInclude(bg => bg.Genre)
@@ -164,15 +168,34 @@ namespace ddac_bookmate.Controllers
                     .ThenInclude(ba => ba.Author)
                 .Include(b => b.BookPublishers)
                     .ThenInclude(bp => bp.Publisher)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(b => b.BookID == id);
 
-            if (book == null)
+            if (selectedBook == null)
             {
                 return NotFound();
             }
 
-            ViewData["SelectedBook"] = book;
-            return View("Index", await _context.Books.Include(b => b.Language).ToListAsync());
+            // Get all books with includes for the main view
+            var books = await _context.Books
+                .Include(b => b.Language)
+                .Include(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                .Include(b => b.BookAuthors)
+                    .ThenInclude(ba => ba.Author)
+                .Include(b => b.BookPublishers)
+                    .ThenInclude(bp => bp.Publisher)
+                .AsNoTracking()
+                .OrderByDescending(b => b.IsTrending)
+                .ThenBy(b => b.BookName)
+                .ToListAsync();
+
+            // Load filter options
+            ViewBag.Genres = await _context.Genres.ToListAsync();
+            ViewBag.Languages = await _context.Languages.ToListAsync();
+
+            ViewData["SelectedBook"] = selectedBook;
+            return View("Index", books);
         }
 
     }

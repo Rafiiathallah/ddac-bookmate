@@ -202,25 +202,37 @@
                     </div>
 
                     <div class="tags-section">
-                        <div class="tag-group">
-                            <span class="tag-label">Authors:</span>
-                            <div class="tag-badges">
-                                @foreach (var bookAuthor in book.BookAuthors)
-                                {
-                                    <span class="tag-badge">@bookAuthor.Author.Name</span>
-                                }
+                        @if (book.BookAuthors != null && book.BookAuthors.Any())
+                        {
+                            <div class="tag-group">
+                                <span class="tag-label">Authors:</span>
+                                <div class="tag-badges">
+                                    @foreach (var bookAuthor in book.BookAuthors)
+                                    {
+                                        @if (bookAuthor?.Author != null)
+                                        {
+                                            <span class="tag-badge">@bookAuthor.Author.Name</span>
+                                        }
+                                    }
+                                </div>
                             </div>
-                        </div>
+                        }
                         
-                        <div class="tag-group">
-                            <span class="tag-label">Publishers:</span>
-                            <div class="tag-badges">
-                                @foreach (var bookPublisher in book.BookPublishers)
-                                {
-                                    <span class="tag-badge">@bookPublisher.Publisher.Name</span>
-                                }
+                        @if (book.BookPublishers != null && book.BookPublishers.Any())
+                        {
+                            <div class="tag-group">
+                                <span class="tag-label">Publishers:</span>
+                                <div class="tag-badges">
+                                    @foreach (var bookPublisher in book.BookPublishers)
+                                    {
+                                        @if (bookPublisher?.Publisher != null)
+                                        {
+                                            <span class="tag-badge">@bookPublisher.Publisher.Name</span>
+                                        }
+                                    }
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
             </div>
