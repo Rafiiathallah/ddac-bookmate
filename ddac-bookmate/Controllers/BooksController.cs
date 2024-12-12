@@ -14,18 +14,57 @@ namespace ddac_bookmate.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, int? genreFilter, int? languageFilter, string priceFilter)
         {
             var books = from b in _context.Books
                         .Include(b => b.Language)
+                        .Include(b => b.BookGenres)
+                            .ThenInclude(bg => bg.Genre)
                         select b;
 
+            // Apply filters
             if (!String.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToLower();
                 books = books.Where(s => s.BookName.ToLower().StartsWith(searchString));
                 ViewData["CurrentFilter"] = searchString;
             }
+
+            if (genreFilter.HasValue)
+            {
+                books = books.Where(b => b.BookGenres.Any(bg => bg.GenreId == genreFilter));
+                ViewData["GenreFilter"] = genreFilter;
+            }
+
+            if (languageFilter.HasValue)
+            {
+                books = books.Where(b => b.LanguageId == languageFilter);
+                ViewData["LanguageFilter"] = languageFilter;
+            }
+
+            if (!string.IsNullOrEmpty(priceFilter))
+            {
+                switch (priceFilter)
+                {
+                    case "0-10":
+                        books = books.Where(b => b.BookPrice >= 0 && b.BookPrice <= 10);
+                        break;
+                    case "10-20":
+                        books = books.Where(b => b.BookPrice > 10 && b.BookPrice <= 20);
+                        break;
+                    case "20-30":
+                        books = books.Where(b => b.BookPrice > 20 && b.BookPrice <= 30);
+                        break;
+                    case "30+":
+                        books = books.Where(b => b.BookPrice > 30);
+                        break;
+                }
+                ViewData["PriceFilter"] = priceFilter;
+            }
+
+            // Load filter options
+            ViewBag.Genres = await _context.Genres.ToListAsync();
+            ViewBag.Languages = await _context.Languages.ToListAsync();
 
             // Order by IsTrending first, then by BookName
             books = books

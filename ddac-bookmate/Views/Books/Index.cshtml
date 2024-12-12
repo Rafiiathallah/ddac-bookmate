@@ -12,7 +12,7 @@
             <p class="sub-header">Explore our collection of amazing books</p>
             
             <div class="search-container">
-                <form asp-controller="Books" asp-action="Index" method="get" class="search-form">
+                <form asp-controller="Books" asp-action="Index" method="get" class="search-form" id="filterForm">
                     <div class="search-wrapper">
                         <i class="bi bi-search search-icon"></i>
                         <input 
@@ -23,6 +23,58 @@
                             value="@ViewData["CurrentFilter"]"
                         >
                         <button type="submit" class="search-button">Search</button>
+                    </div>
+                    
+                    <div class="filters-container">
+                        <div class="filter-group">
+                            <div class="select-wrapper">
+                                <i class="bi bi-tag filter-icon"></i>
+                                <select name="genreFilter" class="filter-select" onchange="this.form.submit()">
+                                    <option value="">All Genres</option>
+                                    @foreach (var genre in ViewBag.Genres)
+                                    {
+                                        <option value="@genre.GenreId" selected="@(ViewData["GenreFilter"]?.ToString() == genre.GenreId.ToString())">
+                                            @genre.Name
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <div class="select-wrapper">
+                                <i class="bi bi-globe filter-icon"></i>
+                                <select name="languageFilter" class="filter-select" onchange="this.form.submit()">
+                                    <option value="">All Languages</option>
+                                    @foreach (var language in ViewBag.Languages)
+                                    {
+                                        <option value="@language.LanguageId" selected="@(ViewData["LanguageFilter"]?.ToString() == language.LanguageId.ToString())">
+                                            @language.Name
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <div class="select-wrapper">
+                                <i class="bi bi-currency-dollar filter-icon"></i>
+                                <select name="priceFilter" class="filter-select" onchange="this.form.submit()">
+                                    <option value="">Any Price</option>
+                                    <option value="0-10" selected="@(ViewData["PriceFilter"]?.ToString() == "0-10")">$0 - $10</option>
+                                    <option value="10-20" selected="@(ViewData["PriceFilter"]?.ToString() == "10-20")">$10 - $20</option>
+                                    <option value="20-30" selected="@(ViewData["PriceFilter"]?.ToString() == "20-30")">$20 - $30</option>
+                                    <option value="30+" selected="@(ViewData["PriceFilter"]?.ToString() == "30+")">$30+</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        @if (ViewData["GenreFilter"] != null || ViewData["LanguageFilter"] != null || ViewData["PriceFilter"] != null || !string.IsNullOrEmpty(ViewData["CurrentFilter"]?.ToString()))
+                        {
+                            <a asp-controller="Books" asp-action="Index" class="clear-filters">
+                                <i class="bi bi-x-circle"></i> Clear Filters
+                            </a>
+                        }
                     </div>
                 </form>
             </div>
@@ -771,5 +823,96 @@
 
 .search-button:hover {
     background: #1557b0;
+}
+
+.filters-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: space-between;
+    padding: 0;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+}
+
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.filter-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #1a73e8;
+    z-index: 1;
+    font-size: 0.9rem;
+}
+
+.filter-select {
+    padding: 0.8rem 1rem 0.8rem 2.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: white;
+    color: #374151;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%231a73e8' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+    width: 100%;
+}
+
+.filter-select:hover {
+    border-color: #1a73e8;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transform: translateY(-1px);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 3px rgba(26,115,232,0.1);
+}
+
+.clear-filters {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    background: #f3f4f6;
+    color: #4b5563;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+    height: 45px;
+}
+
+.clear-filters:hover {
+    background: #e5e7eb;
+    color: #1f2937;
+    transform: translateY(-1px);
+}
+
+.clear-filters i {
+    font-size: 1rem;
 }
 </style>
