@@ -14,10 +14,25 @@ namespace ddac_bookmate.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            List<Book> books = await _context.Books.Include(b => b.Language).ToListAsync();
-            return View(books);
+            var books = from b in _context.Books
+                        .Include(b => b.Language)
+                        select b;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                books = books.Where(s => s.BookName.ToLower().StartsWith(searchString));
+                ViewData["CurrentFilter"] = searchString;
+            }
+
+            // Order by IsTrending first, then by BookName
+            books = books
+                .OrderByDescending(b => b.IsTrending)
+                .ThenBy(b => b.BookName);
+
+            return View(await books.ToListAsync());
         }
 
         //public IActionResult Index()

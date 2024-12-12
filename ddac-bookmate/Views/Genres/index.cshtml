@@ -1,0 +1,90 @@
+@model IEnumerable<ddac_bookmate.Models.Genre>
+
+@{
+    ViewData["Title"] = "Genres";
+}
+
+<div class="genres-container">
+    <div class="genres-header">
+        <div class="header-content">
+            <h1>EXPLORE GENRES</h1>
+            <p class="sub-header">Discover books by your favorite genres</p>
+        </div>
+    </div>
+
+    <div class="genres-grid">
+        @foreach (var genre in Model)
+        {
+            <div class="genre-card">
+                <div class="genre-content">
+                    <h3>@genre.Name</h3>
+                    @if (!string.IsNullOrEmpty(genre.Description))
+                    {
+                        <p>@genre.Description</p>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+.genres-container {
+    padding: 2rem 0;
+}
+
+.genres-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.header-content h1 {
+    font-size: 2.5rem;
+    color: #1a73e8;
+    margin-bottom: 0.5rem;
+}
+
+.sub-header {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.genres-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.genre-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.genre-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.genre-content {
+    padding: 2rem;
+    text-align: center;
+}
+
+.genre-content h3 {
+    color: #1a73e8;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.genre-content p {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+</style>

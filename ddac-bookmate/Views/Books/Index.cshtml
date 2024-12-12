@@ -10,11 +10,27 @@
         <div class="header-content">
             <h1>DISCOVER BOOKS</h1>
             <p class="sub-header">Explore our collection of amazing books</p>
+            
+            <div class="search-container">
+                <form asp-controller="Books" asp-action="Index" method="get" class="search-form">
+                    <div class="search-wrapper">
+                        <i class="bi bi-search search-icon"></i>
+                        <input 
+                            type="text" 
+                            name="searchString" 
+                            class="search-input" 
+                            placeholder="Search by book title..."
+                            value="@ViewData["CurrentFilter"]"
+                        >
+                        <button type="submit" class="search-button">Search</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <div class="books-grid">
-        @foreach(var item in orderedBooks)
+        @foreach(var item in Model)
         {
             <div class="book-card">
                 @using (Html.BeginForm("Details", "Books", FormMethod.Get))
@@ -358,7 +374,7 @@
     background: #1f2937;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
     transition: left 0.3s ease-in-out;
-    z-index: 1000;
+    z-index: 1100;
     overflow-y: auto;
 }
 
@@ -697,5 +713,63 @@
     z-index: 10;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     white-space: nowrap;
+}
+
+.search-container {
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 0.5rem;
+    transition: box-shadow 0.2s;
+}
+
+.search-wrapper:focus-within {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.search-icon {
+    color: #1a73e8;
+    font-size: 1.2rem;
+    margin-left: 1rem;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    outline: none;
+    width: 100%;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+.search-button {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-button:hover {
+    background: #1557b0;
 }
 </style>
