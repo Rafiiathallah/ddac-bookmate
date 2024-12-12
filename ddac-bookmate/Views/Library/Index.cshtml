@@ -17,10 +17,16 @@
                 @foreach (var book in Model)
                 {
                     <div class="book-card">
+                        <form asp-action="DeleteBook" asp-route-id="@book.BookID" method="post" 
+                              onsubmit="return confirm('Remove this book from your library?');">
+                            <button type="submit" class="remove-button" title="Remove from library">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </form>
                         <div class="book-cover">
                             <div class="book-title-preview">@book.BookName</div>
-                            <div class="read-overlay">
-                                <button class="read-button">
+                            <div class="book-actions">
+                                <button class="action-button read-button">
                                     <i class="bi bi-book"></i>
                                     Read Now
                                 </button>

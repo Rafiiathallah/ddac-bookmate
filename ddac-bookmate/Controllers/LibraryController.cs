@@ -45,5 +45,29 @@ namespace ddac_bookmate.Controllers
 
             return View(books);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteBook(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            var library = await _context.Libraries
+                .FirstOrDefaultAsync(l => l.UserId == userId);
+
+            if (library != null)
+            {
+                var libraryBook = await _context.Set<BookLibrary>()
+                    .FirstOrDefaultAsync(bl => bl.BookId == id && bl.LibraryId == library.LibraryId);
+
+                if (libraryBook != null)
+                {
+                    _context.Set<BookLibrary>().Remove(libraryBook);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Book removed from your library.";
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
