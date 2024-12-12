@@ -63,12 +63,10 @@
                         <i class="bi bi-plus"></i>
                         Add More Books
                     </a>
-                    <form asp-action="Purchase" method="post" class="checkout-form">
-                        <button type="submit" class="checkout-btn">
-                            <i class="bi bi-credit-card"></i>
-                            Proceed to Checkout
-                        </button>
-                    </form>
+                    <a asp-controller="Cart" asp-action="Checkout" class="checkout-btn">
+                        <i class="bi bi-credit-card"></i>
+                        Proceed to Checkout
+                    </a>
                 </div>
             </div>
         </div>

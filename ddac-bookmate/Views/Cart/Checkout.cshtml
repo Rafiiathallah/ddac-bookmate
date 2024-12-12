@@ -1,0 +1,174 @@
+@model Cart
+
+<div class="checkout-container">
+    <div class="checkout-header">
+        <h1>Checkout</h1>
+        <p class="checkout-summary">Order Summary</p>
+    </div>
+
+    <div class="cart-items">
+        @foreach (var item in Model.BookCarts)
+        {
+            <div class="cart-item">
+                <div class="book-cover">
+                    <i class="bi bi-book me-1"></i>
+                    <div class="book-title-preview">
+                        @{
+                            var title = item.Book.BookName;
+                            var words = title.Split(' ');
+                            var maxWords = 3;
+                            var displayWords = words.Take(maxWords);
+                        }
+                        @foreach (var word in displayWords)
+                        {
+                            <span class="title-word">@word</span>
+                        }
+                    </div>
+                </div>
+                <div class="item-details">
+                    <h3>@item.Book.BookName</h3>
+                    <p class="item-author">by @item.Book.BookAuthor</p>
+                    <div class="item-price">$@item.UnitPrice.ToString("F2") × @item.Quantity</div>
+                </div>
+            </div>
+        }
+        <div class="total-section">
+            <span>Total Amount</span>
+            <span class="total-price">$@Model.TotalPrice.ToString("F2")</span>
+        </div>
+    </div>
+
+    <div class="payment-methods">
+        <h2>Payment Method</h2>
+        
+        <div class="method-group">
+            <h3>Card Payment</h3>
+            <div class="method-options">
+                <div class="method-option" data-provider="visa">
+                    <div class="method-icon">
+                        <i class="bi bi-credit-card-fill"></i>
+                    </div>
+                    <div class="method-info">
+                        <span class="method-name">Visa</span>
+                        <span class="method-description">Credit or Debit</span>
+                    </div>
+                </div>
+                <div class="method-option" data-provider="mastercard">
+                    <div class="method-icon">
+                        <i class="bi bi-credit-card-2-front-fill"></i>
+                    </div>
+                    <div class="method-info">
+                        <span class="method-name">Mastercard</span>
+                        <span class="method-description">Credit or Debit</span>
+                    </div>
+                </div>
+                <div class="method-option" data-provider="amex">
+                    <div class="method-icon">
+                        <i class="bi bi-credit-card-2-back-fill"></i>
+                    </div>
+                    <div class="method-info">
+                        <span class="method-name">American Express</span>
+                        <span class="method-description">Credit or Debit</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="method-group">
+            <h3>E-Wallet</h3>
+            <div class="method-options">
+                <div class="method-option" data-provider="tng">
+                    <div class="method-icon">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                    <div class="method-info">
+                        <span class="method-name">Touch 'n Go</span>
+                        <span class="method-description">E-Wallet</span>
+                    </div>
+                </div>
+                <div class="method-option" data-provider="shopeepay">
+                    <div class="method-icon">
+                        <i class="bi bi-bag-fill"></i>
+                    </div>
+                    <div class="method-info">
+                        <span class="method-name">ShopeePay</span>
+                        <span class="method-description">E-Wallet</span>
+                    </div>
+                </div>
+                <div class="method-option" data-provider="grabpay">
+                    <div class="method-icon">
+                        <i class="bi bi-phone-fill"></i>
+                    </div>
+                    <div class="method-info">
+                        <span class="method-name">GrabPay</span>
+                        <span class="method-description">E-Wallet</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="payButton" class="pay-button" disabled>
+            Pay $@Model.TotalPrice.ToString("F2")
+        </button>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentOptions = document.querySelectorAll('.method-option');
+            const payButton = document.getElementById('payButton');
+            let selectedOption = null;
+
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selection from all options
+                    paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Select clicked option
+                    this.classList.add('selected');
+                    selectedOption = this.dataset.provider;
+                    
+                    // Enable and style pay button
+                    payButton.removeAttribute('disabled');
+                    payButton.classList.add('active');
+                });
+            });
+
+            payButton.addEventListener('click', async function() {
+                if (!selectedOption) return;
+
+                this.disabled = true;
+                this.innerHTML = '<span class="spinner"></span> Processing...';
+
+                try {
+                    const response = await fetch('/Cart/ProcessPayment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    });
+
+                    if (response.ok) {
+                        this.innerHTML = '<i class="bi bi-check-lg"></i> Success!';
+                        setTimeout(() => {
+                            window.location.href = '/Library';
+                        }, 1000);
+                    } else {
+                        throw new Error('Payment failed');
+                    }
+                } catch (error) {
+                    this.disabled = false;
+                    this.classList.remove('active');
+                    this.innerHTML = 'Pay $@Model.TotalPrice.ToString("F2")';
+                    alert('Payment failed. Please try again.');
+                }
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/checkout.css" />
+}
