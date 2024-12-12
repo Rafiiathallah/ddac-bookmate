@@ -1,0 +1,449 @@
+@model ddac_bookmate.Models.Publisher
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="publisher-details-container">
+    <div class="publisher-header">
+        <div class="header-content">
+            <h1>@Model.Name</h1>
+            @if (!string.IsNullOrEmpty(Model.Bio))
+            {
+                <p class="bio">@Model.Bio</p>
+            }
+            <div class="publisher-meta">
+                <div class="meta-item">
+                    <i class="bi bi-book"></i>
+                    <span>@Model.BookPublishers.Count() Published Books</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="books-section">
+        <h2>Books by @Model.Name</h2>
+        <div class="books-grid">
+            @foreach (var bookPublisher in Model.BookPublishers)
+            {
+                var book = bookPublisher.Book;
+                <div class="book-card">
+                    @using (Html.BeginForm("Details", "Books", FormMethod.Get))
+                    {
+                        <input type="hidden" name="id" value="@book.BookID" />
+                        <button type="submit" class="book-card-button">
+                            <div class="book-cover">
+                                @if (book.IsTrending)
+                                {
+                                    <div class="trending-indicator">
+                                        <i class="bi bi-fire"></i> Trending
+                                    </div>
+                                }
+                                <div class="book-title-preview">@book.BookName</div>
+                            </div>
+                            <div class="book-details">
+                                <h3>@book.BookName</h3>
+                                <p class="book-author">@book.BookAuthor</p>
+                                <p class="book-info">
+                                    <span class="language-badge">@(book.Language?.Name ?? "N/A")</span>
+                                    <span class="price-badge">$@book.BookPrice</span>
+                                </p>
+                            </div>
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+/* Same styles as Authors/Details.cshtml but with 'author' replaced with 'publisher' in class names */
+.publisher-details-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.publisher-header {
+    background: #1f2937;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    margin-bottom: 4rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.header-content h1 {
+    font-size: 3rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.bio {
+    font-size: 1.1rem;
+    color: #e5e7eb;
+    line-height: 1.8;
+    margin: 0 auto 2rem;
+    max-width: 700px;
+}
+
+.publisher-meta {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    color: #e5e7eb;
+    background: #2d3748;
+    padding: 1.5rem;
+    border-radius: 15px;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1.1rem;
+    color: #e5e7eb;
+}
+
+.meta-item i {
+    color: #60a5fa;
+    font-size: 1.3rem;
+}
+
+.books-section {
+    margin-top: 4rem;
+    padding: 0 2rem;
+}
+
+.books-section h2 {
+    text-align: left;
+    color: #111827;
+    margin-bottom: 3rem;
+    font-size: 2.2rem;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.books-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: none;
+    width: 60px;
+    height: 4px;
+    background: #60a5fa;
+    border-radius: 2px;
+}
+
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2.5rem;
+    padding: 2rem 0;
+}
+
+.book-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    width: 180px;
+}
+
+.book-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.book-cover {
+    aspect-ratio: 3/4;
+    background: linear-gradient(145deg, #60a5fa, #3b82f6);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.book-title-preview {
+    color: white;
+    font-size: 1.1rem;
+    text-align: center;
+    font-weight: 500;
+    padding: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+}
+
+.book-details {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.book-details h3 {
+    font-size: 1rem;
+    color: #1f2937;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.book-author {
+    color: #6b7280;
+    font-size: 0.85rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.book-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-top: 0.2rem;
+}
+
+.language-badge {
+    display: inline-block;
+    background: #e8f0fe;
+    color: #1a73e8;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+}
+
+.book-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.book-details-panel.active ~ .blur-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.book-card-button {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+}
+
+.book-details-panel {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 40%;
+    height: 100vh;
+    background: #1f2937;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease-in-out;
+    z-index: 1100;
+    overflow-y: auto;
+}
+
+.book-details-panel.active {
+    left: 0;
+}
+
+.book-details-panel.active ~ .blur-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.details-content {
+    padding: 2rem;
+    padding-top: 3.5rem;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.language-badge {
+    display: inline-block;
+    background: #e8f0fe;
+    color: #1a73e8;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+}
+
+.price-badge {
+    background: #60a5fa;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.buy-button, .cart-button, .wishlist-button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.buy-button {
+    background: #60a5fa;
+    color: white;
+}
+
+.cart-button {
+    background: #60a5fa;
+    color: white;
+}
+
+.wishlist-button {
+    background: white;
+    color: #1f2937;
+}
+
+.buy-button:hover, .cart-button:hover, .wishlist-button:hover {
+    transform: translateY(-2px);
+}
+
+.publication-info {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+
+.book-cover-large {
+    background: linear-gradient(145deg, #60a5fa, #3b82f6);
+    width: 250px;
+    height: 375px;
+    margin: 0 auto 2rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    color: white;
+}
+
+.book-cover-large i {
+    font-size: 4rem;
+    color: #1a73e8;
+}
+
+.book-info-detailed {
+    text-align: center;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: #60a5fa;
+    font-size: 1.2rem;
+}
+
+.separator {
+    color: #60a5fa;
+}
+
+.author, .published-date {
+    font-size: 1.2rem;
+    color: #60a5fa;
+}
+
+.synopsis {
+    color: #d1d5db;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.trending-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #ff5722;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0 0 8px 0;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.trending-indicator i {
+    font-size: 1rem;
+}
+
+.book-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: nowrap;
+}
+
+.language-badge {
+    display: inline-block;
+    background: #e8f0fe;
+    color: #1a73e8;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.price-badge {
+    background: #60a5fa;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+</style>

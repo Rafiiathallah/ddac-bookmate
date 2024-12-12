@@ -41,9 +41,18 @@
                                     <i class="bi bi-list"></i>
                                 </div>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-controller="Genres" asp-action="Index">Genres</a></li>
-                                    <li><a class="dropdown-item" href="#">Authors</a></li>
-                                    <li><a class="dropdown-item" href="#">Publishers</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Books" asp-action="Index">
+                                        <i class="bi bi-book"></i>
+                                        Books
+                                    </a></li>
+                                    <li><a class="dropdown-item" asp-controller="Authors" asp-action="Index">
+                                        <i class="bi bi-person"></i>
+                                        Authors
+                                    </a></li>
+                                    <li><a class="dropdown-item" asp-controller="Publishers" asp-action="Index">
+                                        <i class="bi bi-building"></i>
+                                        Publishers
+                                    </a></li>
                                 </ul>
                             </li>
                             <li class="nav-item cart-item">
@@ -365,17 +374,18 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: all 0.2s;
         margin: 0;
-    }
-
-    .nav-icon:hover {
-        background: #d2e3fc;
     }
 
     .nav-icon i {
         font-size: 1.2rem;
         color: #1a73e8;
+        transition: color 0.2s;
+    }
+
+    .nav-icon:hover i {
+        color: #1557b0;
     }
 
     .navbar {
