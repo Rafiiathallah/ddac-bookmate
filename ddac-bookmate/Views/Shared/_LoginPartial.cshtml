@@ -21,6 +21,12 @@
             <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
         </form>
     </li>
+    <li class="nav-item">
+        <a class="nav-link nav-icon-link" asp-controller="Library" asp-action="Index" title="My Library">
+            <i class="bi bi-book"></i>
+            <span class="nav-icon-badge">@ViewData["LibraryCount"]</span>
+        </a>
+    </li>
 }
 else
 {
