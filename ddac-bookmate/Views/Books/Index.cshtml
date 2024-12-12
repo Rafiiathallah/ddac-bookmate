@@ -105,7 +105,10 @@
                     <div class="price-section">
                         <span class="price">$@book.BookPrice</span>
                         <div class="action-buttons">
-                            <button class="buy-button">Buy Now</button>
+                            <form asp-controller="Library" asp-action="AddToLibrary" method="post" style="margin: 0;">
+                                <input type="hidden" name="bookId" value="@book.BookID" />
+                                <button type="submit" class="buy-button">Buy Now</button>
+                            </form>
                             <form asp-controller="Cart" asp-action="AddToCart" method="post" style="margin: 0;">
                                 <input type="hidden" name="bookId" value="@book.BookID" />
                                 <button type="submit" class="cart-button">

@@ -69,5 +69,52 @@ namespace ddac_bookmate.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToLibrary(int bookId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            // Get or create user's library
+            var library = await _context.Libraries
+                .Include(l => l.BookAuthors)
+                .FirstOrDefaultAsync(l => l.UserId == userId);
+
+            if (library == null)
+            {
+                library = new Library 
+                { 
+                    UserId = userId,
+                    BookCount = 0,
+                    AddedDate = DateTime.UtcNow
+                };
+                _context.Libraries.Add(library);
+                await _context.SaveChangesAsync();
+            }
+
+            // Check if book already exists in library
+            var existingBook = library.BookAuthors?
+                .FirstOrDefault(ba => ba.BookId == bookId);
+
+            if (existingBook == null)
+            {
+                var bookLibrary = new BookLibrary
+                {
+                    BookId = bookId,
+                    LibraryId = library.LibraryId,
+                    IsFavourite = false
+                };
+                _context.BookLibraries.Add(bookLibrary);
+                library.BookCount++;
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Book added to your library!";
+            }
+            else
+            {
+                TempData["Info"] = "This book is already in your library.";
+            }
+
+            return RedirectToAction("Index", "Library");
+        }
     }
 }
