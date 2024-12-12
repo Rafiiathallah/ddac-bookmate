@@ -122,5 +122,64 @@ namespace ddac_bookmate.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Cart");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Purchase()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            // Get user's cart with books
+            var cart = await _context.Carts
+                .Include(c => c.BookCarts)
+                    .ThenInclude(bc => bc.Book)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (cart == null || !cart.BookCarts.Any())
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Get or create user's library
+            var library = await _context.Libraries
+                .Include(l => l.BookAuthors)
+                .FirstOrDefaultAsync(l => l.UserId == userId);
+
+            if (library == null)
+            {
+                library = new Library 
+                { 
+                    UserId = userId,
+                    BookCount = 0,
+                    AddedDate = DateTime.UtcNow
+                };
+                _context.Libraries.Add(library);
+                await _context.SaveChangesAsync();
+            }
+
+            // Add books to library (skip if already exists)
+            foreach (var bookCart in cart.BookCarts)
+            {
+                var existingBook = library.BookAuthors?
+                    .FirstOrDefault(ba => ba.BookId == bookCart.BookId);
+
+                if (existingBook == null)
+                {
+                    var bookLibrary = new BookLibrary
+                    {
+                        BookId = bookCart.BookId,
+                        LibraryId = library.LibraryId,
+                        IsFavourite = false
+                    };
+                    _context.BookLibraries.Add(bookLibrary);
+                    library.BookCount++;
+                }
+            }
+
+            // Clear the cart
+            _context.BookCarts.RemoveRange(cart.BookCarts);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Library");
+        }
     }
 } 

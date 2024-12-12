@@ -1,0 +1,50 @@
+@model List<Book>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/library.css" />
+}
+
+<div class="library-container">
+    <div class="library-header">
+        <h1>My Library</h1>
+        <p class="sub-header">Your collection of @Model.Count book@(Model.Count != 1 ? "s" : "")</p>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="library-content">
+            <div class="library-grid">
+                @foreach (var book in Model)
+                {
+                    <div class="book-card">
+                        <div class="book-cover">
+                            <div class="book-title-preview">@book.BookName</div>
+                            <div class="read-overlay">
+                                <button class="read-button">
+                                    <i class="bi bi-book"></i>
+                                    Read Now
+                                </button>
+                            </div>
+                        </div>
+                        <div class="book-details">
+                            <h3>@book.BookName</h3>
+                            <p class="book-author">by @book.BookAuthor</p>
+                            <div class="book-meta">
+                                <span class="language-badge">@book.Language?.Name</span>
+                                <span class="last-read">Last read: Never</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-library">
+            <i class="bi bi-book"></i>
+            <p>Your library is empty</p>
+            <a asp-controller="Books" asp-action="Index" class="browse-books-btn">Browse Books</a>
+        </div>
+    }
+</div>

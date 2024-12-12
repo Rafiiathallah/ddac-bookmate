@@ -60,13 +60,15 @@
                 </div>
                 <div class="cart-actions">
                     <a asp-controller="Books" asp-action="Index" class="add-more-btn">
-                        <i class="bi bi-plus-lg"></i>
+                        <i class="bi bi-plus"></i>
                         Add More Books
                     </a>
-                    <button class="checkout-btn">
-                        <i class="bi bi-credit-card"></i>
-                        Proceed to Checkout
-                    </button>
+                    <form asp-action="Purchase" method="post" class="checkout-form">
+                        <button type="submit" class="checkout-btn">
+                            <i class="bi bi-credit-card"></i>
+                            Proceed to Checkout
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
