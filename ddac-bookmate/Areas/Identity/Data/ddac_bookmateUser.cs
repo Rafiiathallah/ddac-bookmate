@@ -20,6 +20,9 @@ public class ddac_bookmateUser : IdentityUser
     [PersonalData]
     public DateTime CustomerDOB { get; set; }
 
+    [PersonalData]
+    public bool IsAdmin { get; set; } = false;  
+
     // Navigation Properties
     public ICollection<Library>? Library { get; set; }          // User's Library
 }
