@@ -36,31 +36,40 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a asp-controller="Cart" asp-action="Index" style="display: block;">
-                                    <div class="cart-icon" title="Shopping Cart">
+                            <li class="nav-item menu-item">
+                                <div class="nav-icon" data-bs-toggle="dropdown" aria-expanded="false" title="Menu">
+                                    <i class="bi bi-list"></i>
+                                </div>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Genres</a></li>
+                                    <li><a class="dropdown-item" href="#">Authors</a></li>
+                                    <li><a class="dropdown-item" href="#">Publishers</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item cart-item">
+                                <a asp-controller="Cart" asp-action="Index">
+                                    <div class="nav-icon" title="Shopping Cart">
                                         <i class="bi bi-cart3"></i>
-                                        <span class="cart-count">0</span>
                                     </div>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a asp-controller="Library" asp-action="Index" style="display: block;">
-                                    <div class="library-icon" title="My Library">
+                                <a asp-controller="Library" asp-action="Index">
+                                    <div class="nav-icon" title="My Library">
                                         <i class="bi bi-book"></i>
                                     </div>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a asp-controller="Wishlist" asp-action="Index" style="display: block;">
-                                    <div class="wishlist-icon" title="Wishlist">
+                                <a asp-controller="Wishlist" asp-action="Index">
+                                    <div class="nav-icon" title="Wishlist">
                                         <i class="bi bi-heart"></i>
                                     </div>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <div class="profile-avatar" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle"></i>
+                            <li class="nav-item profile-item">
+                                <div class="nav-icon" data-bs-toggle="dropdown" aria-expanded="false" title="Profile">
+                                    <i class="bi bi-person"></i>
                                 </div>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li class="dropdown-header">Hello @User.Identity.Name!</li>
@@ -155,6 +164,9 @@
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         border-radius: 8px;
         min-width: 200px;
+        z-index: 1051;
+        right: 1rem !important;
+        left: auto !important;
     }
 
     .dropdown-header {
@@ -326,6 +338,73 @@
         .social-links {
             justify-content: center;
         }
+    }
+
+    .navbar-nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .profile-item {
+        margin-left: 0.5rem;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .nav-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e8f0fe;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        margin: 0;
+    }
+
+    .nav-icon:hover {
+        background: #d2e3fc;
+    }
+
+    .nav-icon i {
+        font-size: 1.2rem;
+        color: #1a73e8;
+    }
+
+    .navbar {
+        position: relative;
+        z-index: 1050;
+        padding-right: 2rem;
+    }
+
+    .book-details-panel {
+        z-index: 1000;
+    }
+
+    .blur-overlay {
+        z-index: 999;
+    }
+
+    .dropdown-menu {
+        padding: 0.5rem 0;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        min-width: 200px;
+        z-index: 1051;
+        right: auto;
+        left: 0;
+    }
+
+    .cart-item {
+        margin-left: 1rem;
     }
     </style>
 </body>
