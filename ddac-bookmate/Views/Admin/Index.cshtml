@@ -1,0 +1,50 @@
+@model IEnumerable<ddac_bookmate.Models.Book>
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin.css" />
+}
+
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <p class="admin-subtitle">⚠️ Administrator Access Only</p>
+    </div>
+
+    <div class="admin-actions">
+        <a href="#" class="action-button edit-button">
+            <i class="bi bi-plus-lg"></i>
+            Add New Book
+        </a>
+    </div>
+
+    <div class="admin-content">
+        <div class="books-grid">
+            @foreach (var book in Model)
+            {
+                <div class="book-card">
+                    <div class="book-cover">
+                        <div class="book-title-preview">@book.BookName</div>
+                    </div>
+                    <div class="book-details">
+                        <h3>@book.BookName</h3>
+                        <p class="book-author">by @book.BookAuthor</p>
+                        <span class="language-badge">@book.Language.Name</span>
+                    </div>
+                    <div class="book-actions">
+                        <a href="#" class="action-button edit-button">
+                            <i class="bi bi-pencil"></i>
+                            Edit Book
+                        </a>
+                        <a href="#" class="action-button delete-button">
+                            <i class="bi bi-trash"></i>
+                            Delete Book
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

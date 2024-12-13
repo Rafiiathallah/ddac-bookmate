@@ -22,11 +22,13 @@ namespace ddac_bookmate.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ddac_bookmateUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<ddac_bookmateUser> _userManager;
 
-        public LoginModel(SignInManager<ddac_bookmateUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ddac_bookmateUser> signInManager, ILogger<LoginModel> logger, UserManager<ddac_bookmateUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -115,8 +117,13 @@ namespace ddac_bookmate.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(Url.Content("~/Home/Dashboard"));                }
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    if (user != null && user.IsAdmin)
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    return RedirectToAction("Index", "Books");
+                }
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
