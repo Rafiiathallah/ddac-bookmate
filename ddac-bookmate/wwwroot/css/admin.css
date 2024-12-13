@@ -35,7 +35,7 @@
   display: flex;
   justify-content: flex-end;
   margin-bottom: 2rem;
-  padding: 0 2.5rem;
+  padding: 0 1rem;
 }
 
 .books-grid {
@@ -78,36 +78,31 @@
 }
 
 .action-button {
-  background: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
   cursor: pointer;
-  transition: all 0.2s ease;
-  transform: translateY(10px);
-  opacity: 0;
-  width: 100%;
-  justify-content: center;
-}
-
-.book-card:hover .action-button {
-  transform: translateY(0);
-  opacity: 1;
 }
 
 .edit-button {
-  color: #1a73e8;
-  transition-delay: 0.05s;
+  background: #1a73e8;
+  color: white;
+  border: none;
 }
 
 .edit-button:hover {
-  background: #1a73e8;
-  color: white;
+  background: #1557b0;
+  transform: translateY(-1px);
+}
+
+.edit-button i {
+  font-size: 1.1rem;
 }
 
 .delete-button {
@@ -285,4 +280,103 @@
   outline: none;
   border-color: #1a73e8;
   box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+.form-container {
+  background: #1f2937;
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: 800px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.book-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #e5e7eb;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.form-control {
+  padding: 0.8rem 1rem;
+  border: 1px solid #374151;
+  background: #111827;
+  color: #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.form-control::placeholder {
+  color: #6b7280;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+select[multiple] {
+  min-height: 120px;
+}
+
+select[multiple] option {
+  padding: 0.5rem;
+  border-bottom: 1px solid #374151;
+}
+
+select[multiple] option:last-child {
+  border-bottom: none;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: flex-end;
+}
+
+.action-button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edit-button {
+  background: #60a5fa;
+  color: white;
+}
+
+.delete-button {
+  background: #374151;
+  color: white;
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
 }

@@ -1,0 +1,105 @@
+@model ddac_bookmate.Models.Book
+
+@{
+    ViewData["Title"] = "Add New Book";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin.css" />
+}
+
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>Add New Book</h1>
+        <p class="admin-subtitle">Add a new book to the collection</p>
+    </div>
+
+    <div class="admin-content">
+        <div class="form-container">
+            <form asp-action="AddBook" method="post" class="book-form">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label asp-for="BookName">Book Title</label>
+                        <input asp-for="BookName" class="form-control" placeholder="Enter book title" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Synopsis">Synopsis</label>
+                        <textarea asp-for="Synopsis" class="form-control" rows="4" placeholder="Enter book synopsis"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="BookPrice">Price ($)</label>
+                            <input asp-for="BookPrice" type="number" step="0.01" min="0" class="form-control" placeholder="0.00" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="BookPublishedDate">Publication Date</label>
+                            <input asp-for="BookPublishedDate" type="date" class="form-control" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="StarRating">Rating (0-5)</label>
+                            <input asp-for="StarRating" type="number" min="0" max="5" class="form-control" placeholder="0" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="LanguageId">Language</label>
+                            <select asp-for="LanguageId" asp-items="@(new SelectList(ViewBag.Languages, "LanguageId", "Name"))" class="form-control" required>
+                                <option value="">Select Language</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Authors <span class="hint">(Hold Ctrl/Cmd to select multiple)</span></label>
+                            <select name="SelectedAuthors" multiple class="form-control" required>
+                                @foreach (var author in ViewBag.Authors)
+                                {
+                                    <option value="@author.AuthorId">@author.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Genres <span class="hint">(Hold Ctrl/Cmd to select multiple)</span></label>
+                            <select name="SelectedGenres" multiple class="form-control" required>
+                                @foreach (var genre in ViewBag.Genres)
+                                {
+                                    <option value="@genre.GenreId">@genre.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Publishers <span class="hint">(Hold Ctrl/Cmd to select multiple)</span></label>
+                        <select name="SelectedPublishers" multiple class="form-control" required>
+                            @foreach (var publisher in ViewBag.Publishers)
+                            {
+                                <option value="@publisher.PublisherId">@publisher.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="action-button edit-button">
+                        <i class="bi bi-plus-lg"></i>
+                        Add Book
+                    </button>
+                    <a asp-action="Index" class="action-button delete-button">
+                        <i class="bi bi-x-lg"></i>
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

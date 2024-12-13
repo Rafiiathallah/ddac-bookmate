@@ -49,5 +49,62 @@ namespace ddac_bookmate.Controllers
 
             return View(filteredBooks);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AddBook()
+        {
+            ViewBag.Languages = await _context.Languages.ToListAsync();
+            ViewBag.Genres = await _context.Genres.ToListAsync();
+            ViewBag.Authors = await _context.Authors.ToListAsync();
+            ViewBag.Publishers = await _context.Publishers.ToListAsync();
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddBook(Book book, int[] SelectedGenres, int[] SelectedAuthors)
+        {
+            if (ModelState.IsValid)
+            {
+                // Set default values
+                book.UploadedDate = DateTime.UtcNow;
+                book.IsTrending = false;
+                
+                // Add the book first
+                _context.Books.Add(book);
+                await _context.SaveChangesAsync();
+
+                // Add genre relationships
+                foreach (var genreId in SelectedGenres)
+                {
+                    var bookGenre = new BookGenre
+                    {
+                        BookId = book.BookID,
+                        GenreId = genreId
+                    };
+                    _context.BookGenres.Add(bookGenre);
+                }
+
+                // Add author relationships
+                foreach (var authorId in SelectedAuthors)
+                {
+                    var bookAuthor = new BookAuthor
+                    {
+                        BookId = book.BookID,
+                        AuthorId = authorId
+                    };
+                    _context.BookAuthors.Add(bookAuthor);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            // If we got this far, something failed, redisplay form
+            ViewBag.Languages = await _context.Languages.ToListAsync();
+            ViewBag.Genres = await _context.Genres.ToListAsync();
+            ViewBag.Authors = await _context.Authors.ToListAsync();
+            return View(book);
+        }
     }
 }
