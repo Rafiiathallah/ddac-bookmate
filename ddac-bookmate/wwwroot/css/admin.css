@@ -1,22 +1,27 @@
 .admin-container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 2rem auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .admin-header {
   text-align: center;
   margin-bottom: 2rem;
+  width: 100%;
 }
 
 .admin-header h1 {
   font-size: 2rem;
   color: #1f2937;
+  margin-bottom: 0.5rem;
 }
 
 .admin-subtitle {
-  color: #4b5563;
-  font-size: 1rem;
+  color: #6b7280;
+  font-size: 0.95rem;
 }
 
 .admin-content {
@@ -29,18 +34,20 @@
 }
 
 .admin-actions {
+  width: 100%;
+  max-width: 1000px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   margin-bottom: 2rem;
-  padding: 0 1rem;
 }
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(4, 220px);
-  gap: 2.5rem;
-  width: fit-content;
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 2rem auto;
 }
 
 .book-card {
@@ -340,37 +347,55 @@
 
 .form-actions {
   display: flex;
-  gap: 0.75rem;
+  justify-content: space-between;
   margin-top: 1.5rem;
-  padding: 0.75rem;
+  padding: 1rem;
   background: #f1f5f9;
   border-radius: 6px;
   border: 1px solid #e5e7eb;
-  justify-content: flex-end;
 }
 
 .action-button {
-  padding: 0.6rem 1.25rem;
+  padding: 0.6rem 1.5rem;
   font-size: 0.875rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 120px;
+  justify-content: center;
 }
 
 .edit-button {
   background: #1a73e8;
   color: white;
+  border: none;
+  margin-right: auto;
 }
 
 .edit-button:hover {
   background: #1557b0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .delete-button {
-  background: #f3f4f6;
+  background: white;
   color: #dc2626;
+  border: 1px solid #e5e7eb;
+  margin-left: auto;
 }
 
 .delete-button:hover {
-  background: #dc2626;
-  color: white;
+  background: #fee2e2;
+  border-color: #dc2626;
+  transform: translateY(-1px);
+}
+
+.action-button i {
+  font-size: 1rem;
 }
 
 /* Tag Input Styles */
