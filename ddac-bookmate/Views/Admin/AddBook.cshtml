@@ -5,6 +5,7 @@
 }
 
 @section Styles {
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/admin.css" />
 }
 
@@ -16,7 +17,7 @@
 
     <div class="admin-content">
         <div class="form-container">
-            <form asp-action="AddBook" method="post" class="book-form">
+            <form asp-action="AddBook" method="post" class="book-form" id="addBookForm">
                 <div class="form-section">
                     <div class="form-group">
                         <label asp-for="BookName">Book Title</label>
@@ -39,17 +40,21 @@
                             <input asp-for="BookPublishedDate" type="date" class="form-control" required />
                         </div>
                     </div>
-                </div>
 
-                <div class="form-section">
                     <div class="form-row">
                         <div class="form-group">
-                            <label asp-for="StarRating">Rating (0-5)</label>
-                            <input asp-for="StarRating" type="number" min="0" max="5" class="form-control" placeholder="0" required />
+                            <label>Rating</label>
+                            <select asp-for="StarRating" class="form-control" required>
+                                <option value="">Select Rating</option>
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <option value="@i">@i Star@(i > 1 ? "s" : "")</option>
+                                }
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <label asp-for="LanguageId">Language</label>
+                            <label>Language</label>
                             <select asp-for="LanguageId" asp-items="@(new SelectList(ViewBag.Languages, "LanguageId", "Name"))" class="form-control" required>
                                 <option value="">Select Language</option>
                             </select>
@@ -58,32 +63,34 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Authors <span class="hint">(Hold Ctrl/Cmd to select multiple)</span></label>
-                            <select name="SelectedAuthors" multiple class="form-control" required>
+                            <label>Authors</label>
+                            <select id="author-select" multiple placeholder="Search or add authors...">
                                 @foreach (var author in ViewBag.Authors)
                                 {
                                     <option value="@author.AuthorId">@author.Name</option>
                                 }
                             </select>
+                            <input type="hidden" name="SelectedAuthors" id="selectedAuthorsInput" />
                         </div>
 
                         <div class="form-group">
-                            <label>Genres <span class="hint">(Hold Ctrl/Cmd to select multiple)</span></label>
-                            <select name="SelectedGenres" multiple class="form-control" required>
-                                @foreach (var genre in ViewBag.Genres)
+                            <label>Publishers</label>
+                            <select id="publisher-select" multiple placeholder="Search or add publishers...">
+                                @foreach (var publisher in ViewBag.Publishers)
                                 {
-                                    <option value="@genre.GenreId">@genre.Name</option>
+                                    <option value="@publisher.PublisherId">@publisher.Name</option>
                                 }
                             </select>
+                            <input type="hidden" name="SelectedPublishers" id="selectedPublishersInput" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Publishers <span class="hint">(Hold Ctrl/Cmd to select multiple)</span></label>
-                        <select name="SelectedPublishers" multiple class="form-control" required>
-                            @foreach (var publisher in ViewBag.Publishers)
+                        <label>Genres</label>
+                        <select name="SelectedGenres" multiple class="form-control" required>
+                            @foreach (var genre in ViewBag.Genres)
                             {
-                                <option value="@publisher.PublisherId">@publisher.Name</option>
+                                <option value="@genre.GenreId">@genre.Name</option>
                             }
                         </select>
                     </div>
@@ -103,3 +110,56 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize TomSelect for Authors
+            new TomSelect('#author-select', {
+                create: true,
+                createOnBlur: true,
+                maxItems: null,
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                createFilter: function(input) {
+                    return input.length >= 2; // Minimum 2 characters for new author
+                },
+                onItemAdd: function(value, item) {
+                    updateHiddenInput('author-select', 'selectedAuthorsInput');
+                },
+                render: {
+                    option: function(item, escape) {
+                        return '<div>' +
+                            '<span class="title">' + escape(item.name) + '</span>' +
+                            (item.isNew ? ' <span class="new-tag">New</span>' : '') +
+                        '</div>';
+                    }
+                }
+            });
+
+            // Initialize TomSelect for Publishers
+            new TomSelect('#publisher-select', {
+                create: true,
+                createOnBlur: true,
+                maxItems: null,
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                createFilter: function(input) {
+                    return input.length >= 2;
+                },
+                onItemAdd: function(value, item) {
+                    updateHiddenInput('publisher-select', 'selectedPublishersInput');
+                }
+            });
+        });
+
+        function updateHiddenInput(selectId, hiddenInputId) {
+            const select = document.getElementById(selectId);
+            const hiddenInput = document.getElementById(hiddenInputId);
+            hiddenInput.value = select.value;
+        }
+    </script>
+}
