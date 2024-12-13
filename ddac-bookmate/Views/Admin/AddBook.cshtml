@@ -87,7 +87,7 @@
 
                     <div class="form-group">
                         <label>Genres</label>
-                        <select name="SelectedGenres" multiple class="form-control" required>
+                        <select id="genre-select" name="SelectedGenres" multiple placeholder="Select genres...">
                             @foreach (var genre in ViewBag.Genres)
                             {
                                 <option value="@genre.GenreId">@genre.Name</option>
@@ -116,50 +116,57 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize TomSelect for Authors
-            new TomSelect('#author-select', {
+            const authorSelect = new TomSelect('#author-select', {
+                plugins: ['remove_button'],
+                maxItems: null,
+                valueField: 'AuthorId',
+                labelField: 'Name',
+                searchField: 'Name',
                 create: true,
                 createOnBlur: true,
-                maxItems: null,
-                valueField: 'id',
-                labelField: 'name',
-                searchField: 'name',
                 createFilter: function(input) {
-                    return input.length >= 2; // Minimum 2 characters for new author
+                    return input.length >= 2;
                 },
-                onItemAdd: function(value, item) {
-                    updateHiddenInput('author-select', 'selectedAuthorsInput');
-                },
-                render: {
-                    option: function(item, escape) {
-                        return '<div>' +
-                            '<span class="title">' + escape(item.name) + '</span>' +
-                            (item.isNew ? ' <span class="new-tag">New</span>' : '') +
-                        '</div>';
-                    }
+                onItemAdd: function(value) {
+                    updateHiddenInput('selectedAuthorsInput', this.items);
                 }
             });
 
             // Initialize TomSelect for Publishers
-            new TomSelect('#publisher-select', {
+            const publisherSelect = new TomSelect('#publisher-select', {
+                plugins: ['remove_button'],
+                maxItems: null,
+                valueField: 'PublisherId',
+                labelField: 'Name',
+                searchField: 'Name',
                 create: true,
                 createOnBlur: true,
-                maxItems: null,
-                valueField: 'id',
-                labelField: 'name',
-                searchField: 'name',
                 createFilter: function(input) {
                     return input.length >= 2;
                 },
-                onItemAdd: function(value, item) {
-                    updateHiddenInput('publisher-select', 'selectedPublishersInput');
+                onItemAdd: function(value) {
+                    updateHiddenInput('selectedPublishersInput', this.items);
                 }
             });
-        });
 
-        function updateHiddenInput(selectId, hiddenInputId) {
-            const select = document.getElementById(selectId);
-            const hiddenInput = document.getElementById(hiddenInputId);
-            hiddenInput.value = select.value;
-        }
+            // Initialize TomSelect for Genres
+            const genreSelect = new TomSelect('select[name="SelectedGenres"]', {
+                plugins: ['remove_button'],
+                maxItems: null,
+                valueField: 'GenreId',
+                labelField: 'Name',
+                searchField: 'Name',
+                create: false,
+                onItemAdd: function(value) {
+                    console.log('Genre added:', value);
+                }
+            });
+
+            function updateHiddenInput(inputId, values) {
+                const input = document.getElementById(inputId);
+                input.value = JSON.stringify(values);
+                console.log(`Updated ${inputId}:`, input.value);
+            }
+        });
     </script>
 }
