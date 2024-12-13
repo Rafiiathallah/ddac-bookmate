@@ -106,5 +106,41 @@ namespace ddac_bookmate.Controllers
             ViewBag.Authors = await _context.Authors.ToListAsync();
             return View(book);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteBook(int id)
+        {
+            var book = await _context.Books
+                .Include(b => b.BookAuthors)
+                .Include(b => b.BookGenres)
+                .Include(b => b.BookPublishers)
+                .FirstOrDefaultAsync(b => b.BookID == id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                // Remove related records first
+                _context.BookAuthors.RemoveRange(book.BookAuthors);
+                _context.BookGenres.RemoveRange(book.BookGenres);
+                _context.BookPublishers.RemoveRange(book.BookPublishers);
+                
+                // Remove the book
+                _context.Books.Remove(book);
+                await _context.SaveChangesAsync();
+
+                TempData["Success"] = $"Book '{book.BookName}' was successfully deleted.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "An error occurred while deleting the book.";
+                // Log the error
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

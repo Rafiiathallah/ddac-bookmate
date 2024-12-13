@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="~/css/admin.css" />
 }
 
+@section Scripts {
+    <script>
+        function confirmDelete(bookId, bookName) {
+            const result = confirm(
+                `Warning: You are about to delete "${bookName}" from the database.\n\n` +
+                `This will:\n` +
+                `• Permanently remove the book from the system\n` +
+                `• Delete all associated author and genre relationships\n` +
+                `• Remove it from all user libraries\n\n` +
+                `This action cannot be undone. Are you sure you want to proceed?`
+            );
+
+            if (result) {
+                window.location.href = `/Admin/DeleteBook/${bookId}`;
+            }
+        }
+    </script>
+}
+
 <div class="admin-container">
     <div class="admin-header">
         <h1>Admin Dashboard</h1>
@@ -21,6 +40,18 @@
     </div>
 
     <div class="admin-content">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Success"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
         <div class="books-grid">
             @foreach (var book in Model)
             {
@@ -38,7 +69,9 @@
                             <i class="bi bi-pencil"></i>
                             Edit Book
                         </a>
-                        <a href="#" class="action-button delete-button">
+                        <a href="#" 
+                           class="action-button delete-button"
+                           onclick="confirmDelete('@book.BookID', '@book.BookName')">
                             <i class="bi bi-trash"></i>
                             Delete Book
                         </a>
