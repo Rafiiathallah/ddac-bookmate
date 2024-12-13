@@ -23,15 +23,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-@*                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li> *@
-                        <!-- @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-primary text-white" asp-area="" asp-controller="Books" asp-action="Index">View Book List</a>
-                            </li>
-                        } -->
+
                     </ul>
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -122,7 +114,6 @@
                         <h4>Quick Links</h4>
                         <a asp-controller="Home" asp-action="Index">Home</a>
                         <a asp-controller="Books" asp-action="Index">Books</a>
-                        <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
                     </div>
                     
                     <div class="link-group">
