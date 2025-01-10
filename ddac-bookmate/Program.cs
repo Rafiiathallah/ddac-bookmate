@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ddac_bookmate.Data;
 using ddac_bookmate.Areas.Identity.Data;
 using Microsoft.AspNetCore.Builder;
+using ddac_bookmate.Services;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ddac_bookmateContextConnection") ?? throw new InvalidOperationException("Connection string 'ddac_bookmateContextConnection' not found.");
 
@@ -14,6 +15,7 @@ builder.Services.AddDefaultIdentity<ddac_bookmateUser>(options => options.SignIn
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<ISNSService, SNSService>();
 
 var app = builder.Build();
 

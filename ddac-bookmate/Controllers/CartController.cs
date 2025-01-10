@@ -4,6 +4,8 @@ using ddac_bookmate.Models;
 using Microsoft.AspNetCore.Authorization;
 using ddac_bookmate.Data;
 using System.Security.Claims;
+using Amazon.SimpleNotificationService;
+using ddac_bookmate.Services;
 
 namespace ddac_bookmate.Controllers
 {
@@ -11,10 +13,12 @@ namespace ddac_bookmate.Controllers
     public class CartController : Controller
     {
         private readonly ddac_bookmateContext _context;
+        private readonly ISNSService _snsService;
 
-        public CartController(ddac_bookmateContext context)
+        public CartController(ddac_bookmateContext context, ISNSService snsService)
         {
             _context = context;
+            _snsService = snsService;
         }
 
         public async Task<IActionResult> Index()
@@ -178,6 +182,24 @@ namespace ddac_bookmate.Controllers
             // Clear the cart
             _context.BookCarts.RemoveRange(cart.BookCarts);
             await _context.SaveChangesAsync();
+
+            // Add this after line 246, before clearing the cart
+            foreach (var bookCart in cart.BookCarts)
+            {
+                var book = bookCart.Book;
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
+                var message = $"Book '{book.BookName}' has been added to your library.";
+                var notificationSent = await _snsService.PublishMessageAsync(
+                    message,
+                    "New Books Added to Library",
+                    userEmail
+                );
+                
+                if (!notificationSent)
+                {
+                    Console.WriteLine($"Failed to send notification for book: {book.BookName}");
+                }
+            }
 
             return RedirectToAction("Index", "Library");
         }

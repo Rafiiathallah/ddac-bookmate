@@ -1,0 +1,20 @@
+
+{
+    "region" : "us-east-1",
+    "configuration" : "Debug",
+    "framework"     : "net8.0",
+    "self-contained" : true,
+    "application"    : "ddacbookmate",
+    "environment"    : "ddacbookmate-dev",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-0281f6ecbc4c9557a\";\"aws:ec2:vpc,Subnets\"=\"subnet-0dcc43b28ec9b02ec\"",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.8.6 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "ddacbookmate-dev",
+    "instance-type"        : "t3a.medium",
+    "key-pair"             : "vockey",
+    "instance-profile"     : "LabInstanceProfile",
+    "service-role"         : "LabRole",
+    "proxy-server"         : "nginx"
+}

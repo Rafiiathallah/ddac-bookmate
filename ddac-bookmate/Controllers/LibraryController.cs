@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using ddac_bookmate.Services;
 
 namespace ddac_bookmate.Controllers
 {
@@ -11,10 +12,12 @@ namespace ddac_bookmate.Controllers
     public class LibraryController : Controller
     {
         private readonly ddac_bookmateContext _context;
+        private readonly ISNSService _snsService;
 
-        public LibraryController(ddac_bookmateContext context)
+        public LibraryController(ddac_bookmateContext context, ISNSService snsService)
         {
             _context = context;
+            _snsService = snsService;
         }
 
         public async Task<IActionResult> Index()
@@ -107,6 +110,17 @@ namespace ddac_bookmate.Controllers
                 _context.BookLibraries.Add(bookLibrary);
                 library.BookCount++;
                 await _context.SaveChangesAsync();
+
+                // Send test SNS notification
+                var book = await _context.Books.FindAsync(bookId);
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
+                var message = $"Book '{book.BookName}' has been added to your library.";
+                await _snsService.PublishMessageAsync(
+                    message,
+                    "New Book Added to Library",
+                    userEmail
+                );
+                
                 TempData["Success"] = "Book added to your library!";
             }
             else
